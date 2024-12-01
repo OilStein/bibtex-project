@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "BibTex-project"
+version = "0.1.0"
+description = ""
+authors = ["Onni Huhtala", "Urho Laurinen", "Mikael Malmsten", "Niko Sihvo", "Jaakko Vikström"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+coverage = "^7.6.4"
+pylint = "^3.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
