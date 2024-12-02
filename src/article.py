@@ -10,4 +10,8 @@ class Article(citation.Citation):
         self.doi = None
 
     def __str__(self):
-        return f"{super().__str__()}. {self.journal}."
+        return f"{self.title}, {self.author}, {self.journal}, {self.year}"
+    
+    def print_as_bibtex(self):
+        """Prints the article in BibTeX format."""
+        return f"@article{{,\n\tauthor = {{{self.author}}},\n\ttitle = {{{self.title}}},\n\tjournal = {{{self.journal}}},\n\tyear = {{{self.year}}}\n}}"

@@ -6,6 +6,3 @@ class Citation:
         self.title = title
         self.author = author
         self.year = year
-
-    def __str__(self):
-        return f"{self.author} ({self.year}). {self.title}."
