@@ -14,8 +14,11 @@ class Article(citation.Citation):
 
     def generate_cite_key(self):
         """Generates a citation key for the article."""
-        authors = self.author.split(" ")
-        key = f"{authors[-1]}{self.year}"
+        authors = self.author.split(" and") # BibTeX separates names with ' and'.
+        surnames = ""
+        for author in authors:
+            surnames += author.split(' ')[-1]
+        key = f"{surnames}{self.year}"
         return key
 
     def print_as_bibtex(self):
