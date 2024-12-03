@@ -1,4 +1,4 @@
-"""Module for arcitle object"""
+"""Module for article object"""
 
 import citation
 
