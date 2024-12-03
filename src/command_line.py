@@ -9,9 +9,26 @@ Functions:
     get_article_info(): Prompts the user for article details and returns an Article object.
 """
 import article
-import database
 
-db = database.Citations()
+def start(db):
+    """ Starts the command-line interface. """
+
+    print("Welcome to the citation database!")
+    print("Commands: new, list, quit")
+    while True:
+        command = input("Enter a command: ")
+        if command == "new":
+            info = get_article_info()
+            db.add_citation(info)
+        elif command == "list":
+            print("Article Information:")
+            for citation in db.get_citations():
+                print(citation.print_as_bibtex())
+        elif command == "quit":
+            break
+        else:
+            print("Invalid command. Please try again.")
+
 
 def get_article_info():
     """
@@ -25,11 +42,4 @@ def get_article_info():
 
     article_obj = article.Article(title, author, journal, year)
 
-    return article_obj
-
-if __name__ == "__main__":
-    info = get_article_info()
-    db.add_citation(info)
-    print("Article Information:")
-    for citation in db.get_citations():
-        print(citation)
+    return article_obj.print_as_bibtex()
