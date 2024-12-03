@@ -33,7 +33,7 @@ class Article(citation.Citation):
         )
 
 
-def main():
+def main(): #pragma: no cover
     """Main function"""
     authors = "John Doe"
     title = "Sample Article"
@@ -42,5 +42,5 @@ def main():
     article = Article(authors, title, journal, year)
     print(article.print_as_bibtex())
 
-if __name__ == "__main__":
+if __name__ == "__main__": #pragma: no cover
     main()
