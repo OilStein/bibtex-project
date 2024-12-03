@@ -12,6 +12,9 @@ Ohjelmistotuotanto miniprojekti
 - **Jaakko Vikström**
 
 ### Tärkeitä
-Product backlog: [Google Sheets](https://docs.google.com/spreadsheets/d/17in9yRM2PUno4twzgbK_y8HkSOfE-ASxqxb1KzS6Fr0/edit?gid=815871211#gid=815871211)
-GitHub actions: [Actions] (https://github.com/OilStein/bibtex-project/actions)
-Repositorio: [GitHub]  (https://github.com/OilStein/bibtex-project)
+
+Product backlog: [https://docs.google.com/spreadsheets/d/17in9yRM2PUno4twzgbK_y8HkSOfE-ASxqxb1KzS6Fr0/edit?gid=815871211#gid=815871211]
+
+GitHub actions: [https://github.com/OilStein/bibtex-project/actions]
+
+Repositorio: [https://github.com/OilStein/bibtex-project]
