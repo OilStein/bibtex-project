@@ -10,11 +10,8 @@ Functions:
 """
 import article
 
-def start(db, filename="citations.json"):
+def start(db, filename="citations.txt"):
     """ Starts the command-line interface. """
-
-    """Load existing citations from a file"""
-    db.load_from_file(filename)
 
     print("Welcome to the citation database!")
     print("Commands: new, list, save, load, quit")
