@@ -10,11 +10,14 @@ Functions:
 """
 import article
 
-def start(db):
+def start(db, filename="citations.json"):
     """ Starts the command-line interface. """
 
+    """Load existing citations from a file"""
+    db.load_from_file(filename)
+
     print("Welcome to the citation database!")
-    print("Commands: new, list, quit")
+    print("Commands: new, list, save, load, quit")
     while True:
         command = input("Enter a command: ")
         if command == "new":
@@ -24,6 +27,12 @@ def start(db):
             print("Article Information:")
             for citation in db.get_citations():
                 print(citation)
+        elif command == "save":
+            db.save_to_file(filename)
+            print(f"Citations saved.")
+        elif command == "load":
+            db.load_from_file(filename)
+            print(f"Citations loaded.")
         elif command == "quit":
             break
         else:

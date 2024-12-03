@@ -17,7 +17,7 @@ class TestCommandLine(TestCase):
         db = Citations()
         command_line.start(db)
         self.assertListEqual(mocked_print.mock_calls, [mock.call('Welcome to the citation database!'), 
-                                                        mock.call('Commands: new, list, quit'), 
+                                                        mock.call('Commands: new, list, save, load, quit'), 
                                                         mock.call('Article Information:'), 
                                                         mock.call('@article{Doe2023,\n\tauthor = "John Doe",\n\ttitle = "Sample Article",\n\tjournal = "Journal of Testing",\n\tyear = "2023"\n}'),
                                                         mock.call('Invalid command. Please try again.')])
