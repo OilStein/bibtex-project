@@ -23,7 +23,7 @@ def start(db):
         elif command == "list":
             print("Article Information:")
             for citation in db.get_citations():
-                print(citation.print_as_bibtex())
+                print(citation)
         elif command == "quit":
             break
         else:
