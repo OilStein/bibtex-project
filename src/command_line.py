@@ -46,6 +46,6 @@ def get_article_info():
     journal = input("Enter the journal name: ")
     year = input("Enter the publication year: ")
 
-    article_obj = article.Article(title, author, journal, year)
+    article_obj = article.Article(author, title, journal, year)
 
     return article_obj.print_as_bibtex()
