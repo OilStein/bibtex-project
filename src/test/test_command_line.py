@@ -6,14 +6,14 @@ class TestCommandLine(TestCase):
 
     @mock.patch('command_line.input', create=True)
     def test_get_article_info(self, mocked_input):
-        mocked_input.side_effect = ["John Doe", "Sample Article", "Journal of Testing", "2023"]
+        mocked_input.side_effect = ["Sample Article", "John Doe", "Journal of Testing", "2023"]
         result = command_line.get_article_info()
         self.assertEqual(result, """@article{Doe2023,\n\tauthor = "John Doe",\n\ttitle = "Sample Article",\n\tjournal = "Journal of Testing",\n\tyear = "2023"\n}""")
 
     @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
     def test_start(self, mocked_input, mocked_print):
-        mocked_input.side_effect = ["new", "John Doe", "Sample Article", "Journal of Testing", "2023", "list", "print news report", "quit"]
+        mocked_input.side_effect = ["new", "Sample Article", "John Doe", "Journal of Testing", "2023", "list", "print news report", "quit"]
         db = Citations()
         command_line.start(db)
         self.assertListEqual(mocked_print.mock_calls, [mock.call('Welcome to the citation database!'), 
