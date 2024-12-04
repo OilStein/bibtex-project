@@ -1,6 +1,0 @@
-@article{Huhtala2024,
-	author = "Onni Huhtala",
-	title = "testi",
-	journal = "Moi",
-	year = "2024"
-}
