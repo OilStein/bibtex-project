@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/OilStein/bibtex-project/graph/badge.svg?token=U9PFMK2HUW)](https://codecov.io/gh/OilStein/bibtex-project)
+
 # bibtex-project
 
 ![GHA workflow badge](https://github.com/OilStein/bibtex-project/actions/workflows/main.yml/badge.svg)
