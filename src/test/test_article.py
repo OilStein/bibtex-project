@@ -7,7 +7,7 @@ class TestArticle(unittest.TestCase):
         journal = "Journal of Test cases"
         year = "2024"
         article_obj = Article(authors, title, journal, year)
-        self.assertEqual(str(article_obj), f"{title}, {authors}, {journal}, {year}")
+        self.assertEqual(str(article_obj), f"{article_obj.generate_cite_key()}, {title}, {authors}, {journal}, {year}, {[]}")
 
     def test_generate_cite_key_one_author(self):
         authors = "T. Case"

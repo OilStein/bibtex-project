@@ -19,7 +19,8 @@ class TestCitations(unittest.TestCase):
     
     def test_save_to_file(self):
         """Test to save to a file"""
-        self.db.add_citation(Article("Test person", "Test title", "Test journal", "2024"))
+        article_obj = Article("Test person", "Test title", "Test journal", "2024")
+        self.db.add_citation(article_obj)
 
         with patch("builtins.open", mock_open()) as mocked_file:
             self.db.save_to_file(self.filename)
@@ -27,4 +28,4 @@ class TestCitations(unittest.TestCase):
             mocked_file.assert_called_with(self.filename, 'w', encoding= "utf-8")
 
             handle = mocked_file()
-            handle.write.assert_any_call("Test title, Test person, Test journal, 2024\n")
+            handle.write.assert_any_call(f"{article_obj.generate_cite_key()}, Test title, Test person, Test journal, 2024, []\n")
