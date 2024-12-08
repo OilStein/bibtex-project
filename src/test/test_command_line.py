@@ -8,7 +8,7 @@ class TestCommandLine(TestCase):
     def test_get_article_info(self, mocked_input):
         mocked_input.side_effect = ["Sample Article", "John Doe", "Journal of Testing", "2023", ""]
         result = command_line.get_article_info()
-        self.assertEqual(result, """@article{Doe2023,\n\tauthor = "John Doe",\n\ttitle = "Sample Article",\n\tjournal = "Journal of Testing",\n\tyear = "2023"\n}""")
+        self.assertEqual(str(result), """Doe2023, Sample Article, John Doe, Journal of Testing, 2023, ['']""")
 
     @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
@@ -19,7 +19,7 @@ class TestCommandLine(TestCase):
         self.assertListEqual(mocked_print.mock_calls, [mock.call('Welcome to the citation database!'), 
                                                         mock.call('Commands: new, list, tag, save, load, quit'), 
                                                         mock.call('Article Information:'), 
-                                                        mock.call('@article{Doe2023,\n\tauthor = "John Doe",\n\ttitle = "Sample Article",\n\tjournal = "Journal of Testing",\n\tyear = "2023"\n}'),
+                                                        mock.call('Doe2023, Sample Article, John Doe, Journal of Testing, 2023, [\'Java\']'),
                                                         mock.call('Invalid command. Please try again.')])
         
         self.assertListEqual(mocked_input.mock_calls, [mock.call("Enter a command: "), 

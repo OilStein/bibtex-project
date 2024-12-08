@@ -28,4 +28,4 @@ class TestCitations(unittest.TestCase):
             mocked_file.assert_called_with(self.filename, 'w', encoding= "utf-8")
 
             handle = mocked_file()
-            handle.write.assert_any_call(f"{article_obj.generate_cite_key()}, Test title, Test person, Test journal, 2024, []\n")
+            handle.write.assert_any_call(f"{article_obj.generate_cite_key()}, Test title, Test person, Test journal, 2024, ['']\n")
