@@ -28,10 +28,13 @@ def start(db, filename="citations.txt"):
         elif command == "tag": # Tägätään jokin viite.
             # Anna viitteen lyhenne
             cite_key = input("Enter the citation key: ")
-            # Anna tägi
-            tags = input("Enter the tags: ").split(",")
             # Haetaan viite
             citation = db.get_one_citation(cite_key)
+            if citation is None:
+                print("Citation not found.")
+                continue
+            # Anna tägi
+            tags = input("Enter the tags: ").split(",")
             # Lisätään tägit
             for tag in tags:
                 citation.add_tag(tag.strip())

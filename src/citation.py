@@ -11,7 +11,10 @@ class Citation:
 
     def add_tag(self, tag):
         """Add a tag to the citation"""
-        if self.tags[0] is "":
+        # check if the tag is already in the list
+        if tag in self.tags:
+            return
+        if self.tags[0] == "":
             self.tags = [tag]
         else:
             self.tags.append(tag)
