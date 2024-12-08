@@ -6,12 +6,15 @@ class Citation:
         self.title = title
         self.author = author
         self.year = year
-        self.tags = []
+        self.tags = [""]
         self.cite_key = self.generate_cite_key()
 
     def add_tag(self, tag):
         """Add a tag to the citation"""
-        self.tags.append(tag)
+        if self.tags[0] is "":
+            self.tags = [tag]
+        else:
+            self.tags.append(tag)
 
     def generate_cite_key(self):
         """Generates a citation key for the article."""
@@ -21,3 +24,6 @@ class Citation:
             surnames += author.split(' ')[-1]
         key = f"{surnames}{self.year}"
         return key
+
+    def __str__(self):
+        return f"{self.cite_key}, {self.title}, {self.author}, {self.year}, {self.tags}"

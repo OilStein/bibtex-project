@@ -11,6 +11,13 @@ class Citations:
     def add_citation(self, citation):
         """ Add citation to database """
         self.citations.append(citation)
+    
+    def get_one_citation(self, cite_key):
+        """ Get one citation by cite_key """
+        for citation in self.citations:
+            if citation.cite_key == cite_key:
+                return citation
+        return None
 
     def get_citations(self):
         """ Get all citations """
@@ -40,7 +47,3 @@ class Citations:
         """ Print citations """
         for citation in self.citations:
             print(citation)
-
-    def __str__(self):
-        # lyhenne, otsikko, vuosi, tagit
-        return f""

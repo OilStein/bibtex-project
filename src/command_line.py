@@ -24,12 +24,18 @@ def start(db, filename="citations.txt"):
             print("Article Information:")
             # Listaa viitteet tietokannasta simpplisiti, jotta tägit voidaan liittää helpommin
             # lyhenne, otsikko, vuosi, tagit
-            for citation in db.get_citations():
-                print(citation)
+            print_citation_list(db)
         elif command == "tag": # Tägätään jokin viite.
             # Anna viitteen lyhenne
-            print("Not implemented yet.")
-            # tägit
+            cite_key = input("Enter the citation key: ")
+            # Anna tägi
+            tags = input("Enter the tags: ").split(",")
+            # Haetaan viite
+            citation = db.get_one_citation(cite_key)
+            # Lisätään tägit
+            for tag in tags:
+                citation.add_tag(tag.strip())
+     
         elif command == "save":
             db.save_to_file(filename)
             print(f"Citations saved.")
@@ -56,6 +62,11 @@ def get_article_info():
     article_obj = article.Article(author, title, journal, year)
     # Tags doesn't save in database
     for tag in tags:
-        article_obj.add_tag(tag)
+        article_obj.add_tag(tag.strip())
 
-    return article_obj.print_as_bibtex()
+    return article_obj
+
+def print_citation_list(db):
+    """Prints the list of citations in the database."""
+    for citation in db.get_citations():
+        print(citation)
