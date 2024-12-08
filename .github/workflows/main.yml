@@ -30,4 +30,4 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: OilStein/bibtex-project
       - name: PyLint
-        run: poetry run pylint bibtex_project
+        run: poetry run pylint src/
