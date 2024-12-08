@@ -35,3 +35,12 @@ class Citations:
             print(f"File not found")
         except Exception as e:
             print(f"Error loading from file")
+
+    def print_citations(self):
+        """ Print citations """
+        for citation in self.citations:
+            print(citation)
+
+    def __str__(self):
+        # lyhenne, otsikko, vuosi, tagit
+        return f""

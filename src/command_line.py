@@ -14,7 +14,7 @@ def start(db, filename="citations.txt"):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
-    print("Commands: new, list, save, load, quit")
+    print("Commands: new, list, tag, save, load, quit")
     while True:
         command = input("Enter a command: ")
         if command == "new":
@@ -22,8 +22,14 @@ def start(db, filename="citations.txt"):
             db.add_citation(info)
         elif command == "list":
             print("Article Information:")
+            # Listaa viitteet tietokannasta simpplisiti, jotta tägit voidaan liittää helpommin
+            # lyhenne, otsikko, vuosi, tagit
             for citation in db.get_citations():
                 print(citation)
+        elif command == "tag": # Tägätään jokin viite.
+            # Anna viitteen lyhenne
+            print("Not implemented yet.")
+            # tägit
         elif command == "save":
             db.save_to_file(filename)
             print(f"Citations saved.")
@@ -45,7 +51,11 @@ def get_article_info():
     author = input("Enter the author(s): ")
     journal = input("Enter the journal name: ")
     year = input("Enter the publication year: ")
+    tags = input("Enter tags separated by commas: ").split(",")
 
     article_obj = article.Article(author, title, journal, year)
+    # Tags doesn't save in database
+    for tag in tags:
+        article_obj.add_tag(tag)
 
     return article_obj.print_as_bibtex()

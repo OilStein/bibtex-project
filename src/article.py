@@ -10,21 +10,14 @@ class Article(citation.Citation):
         self.doi = None
 
     def __str__(self):
-        return f"{self.title}, {self.author}, {self.journal}, {self.year}"
+        return f"{self.cite_key}, {self.title}, {self.author}, {self.journal}, {self.year}, {self.tags}"
 
-    def generate_cite_key(self):
-        """Generates a citation key for the article."""
-        authors = self.author.split(" and") # BibTeX separates names with ' and'.
-        surnames = ""
-        for author in authors:
-            surnames += author.split(' ')[-1]
-        key = f"{surnames}{self.year}"
-        return key
+
 
     def print_as_bibtex(self):
         """Prints the article in BibTeX format."""
         return (
-            f'@article{{{self.generate_cite_key()},\n'
+            f'@article{{{self.cite_key},\n'
             f'\tauthor = "{self.author}",\n'
             f'\ttitle = "{self.title}",\n'
             f'\tjournal = "{self.journal}",\n'
@@ -40,6 +33,8 @@ def main(): #pragma: no cover
     journal = "Journal of Testing"
     year = 2023
     article = Article(authors, title, journal, year)
+    article.add_tag("test")
+    print(article)
     print(article.print_as_bibtex())
 
 if __name__ == "__main__": #pragma: no cover
