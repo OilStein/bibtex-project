@@ -2,6 +2,7 @@
 
 ![GHA workflow badge](https://github.com/OilStein/bibtex-project/actions/workflows/main.yml/badge.svg)
 [![codecov](https://codecov.io/gh/OilStein/bibtex-project/graph/badge.svg?token=U9PFMK2HUW)](https://codecov.io/gh/OilStein/bibtex-project)
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
 
 Ohjelmistotuotanto miniprojekti
 

@@ -1,4 +1,3 @@
-
 """
 commandline.py
 
@@ -38,13 +37,13 @@ def start(db, filename="citations.txt"):
             # Lisätään tägit
             for tag in tags:
                 citation.add_tag(tag.strip())
-     
+
         elif command == "save":
             db.save_to_file(filename)
-            print(f"Citations saved.")
+            print("Citations saved.")
         elif command == "load":
             db.load_from_file(filename)
-            print(f"Citations loaded.")
+            print("Citations loaded.")
         elif command == "quit":
             break
         else:
@@ -72,4 +71,5 @@ def get_article_info():
 def print_citation_list(db):
     """Prints the list of citations in the database."""
     for citation in db.get_citations():
-        print(str(citation)) # Needs to be in this format for the tests to work. Otherwise comparing object to string.
+        # Needs to be in this format for the tests to work. Otherwise comparing object to string.
+        print(str(citation))

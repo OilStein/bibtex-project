@@ -10,7 +10,9 @@ class Article(citation.Citation):
         self.doi = None
 
     def __str__(self):
-        return f"{self.cite_key}, {self.title}, {self.author}, {self.journal}, {self.year}, {self.tags}"
+        return (f"{self.cite_key}, {self.title}, "
+                f"{self.author}, {self.journal}, {self.year}, {self.tags}"
+        )
 
 
 
