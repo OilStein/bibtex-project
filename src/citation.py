@@ -1,12 +1,22 @@
+import re
+
 """ Super class for all citation objects. """
 
 class Citation:
     """Class for citation object"""
-    def __init__(self, title, author, year):
+    def __init__(self, title, author, year, **kwargs):
         self.title = title
         self.author = author
         self.year = year
-        self.tags = [""]
+        self.tags = kwargs.get("tags", [""])
+        self.cite_key = self.generate_cite_key()
+
+    def __init__(self, bibtex):
+        data = self.parse_bibtex_entry(bibtex)
+        self.title = data["title"]
+        self.author = data["author"]
+        self.year = data["year"]
+        self.tags = data.get("tags", [""])
         self.cite_key = self.generate_cite_key()
 
     def add_tag(self, tag):
@@ -28,5 +38,48 @@ class Citation:
         key = f"{surnames}{self.year}"
         return key
 
+    def print_as_bibtex(self):
+        """Prints the article in BibTeX format."""
+        return (
+            f'@misc{{{self.cite_key},\n'
+            f'\tauthor = "{self.author}",\n'
+            f'\ttitle = "{self.title}",\n'
+            f'\tjournal = "{self.journal}",\n'
+            f'\tyear = "{self.year}"\n'
+            f'\ttags = "{self.tags}"\n'
+            f'}}'
+        )
+
+    def parse_bibtex_entry(self, bibtex_str):
+        # Define a regex pattern to match the BibTeX fields
+        pattern = r'(?P<key>@article\{(?P<identifier>[^,]+),\s*(?P<fields>.+?)\s*\})'
+        match = re.search(pattern, bibtex_str, re.DOTALL)
+
+        if match:
+            identifier = match.group('identifier')
+            fields_str = match.group('fields')
+            
+            # Now we need to extract key-value pairs from the fields
+            fields = {}
+            for line in fields_str.split(','):
+                key_value = line.split('=', 1)
+                if len(key_value) == 2:
+                    key = key_value[0].strip()
+                    value = key_value[1].strip().strip('"').strip()
+                    fields[key] = value
+                    
+            return {'identifier': identifier, **fields}
+
     def __str__(self):
         return f"{self.cite_key}, {self.title}, {self.author}, {self.year}, {self.tags}"
+
+
+if __name__ == "__main__":
+    bibtex_str = """@article{Doe2023,
+        author = "John Doe",
+        title = "Sample Article",
+        journal = "Journal of Testing",
+        year = "2023"
+}"""
+    obj = Citation(bibtex_str)
+    print(str(obj))
