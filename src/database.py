@@ -1,4 +1,6 @@
 """ Database module for storing citations """
+import json
+import article
 
 class Citations:
     """ Class for storing citations """
@@ -21,20 +23,27 @@ class Citations:
         return self.citations
 
     def save_to_file(self, filename: str):
-        """Save citations to a file"""
+        """Save citations to a file in JSON"""
         try:
             with open(filename, 'w', encoding='utf-8') as file:
-                for citation in self.citations:
-                    file.write(str(citation) + '\n')
+                json.dump([citation.to_dict() for citation in self.citations], file, indent=4)
             print(f"Citations saved to {filename}")
         except IOError as e:
-            print(f"Error saving to file: {e}")
+            print(f"Error saving to file")
 
     def load_from_file(self, filename: str):
-        """Load citations from a file"""
+        """Load citations from a file in JSON"""
         try:
             with open(filename, 'r', encoding='utf-8') as file:
-                self.citations = [line.strip() for line in file.readlines()]
+                citations_data = json.load(file)
+                self.citations = []
+                for data in citations_data:
+                    if 'journal' in data:
+                        citation = article.Article(data['author'], data['title'], data['journal'], data['year'])
+                    else:
+                        citation = citation.Citation(data['title'], data['author'], data['year'])
+                    citation.tags = data.get('tags', [])
+                    self.citations.append(citation)
         except FileNotFoundError:
             print("File not found")
         except IOError as e:

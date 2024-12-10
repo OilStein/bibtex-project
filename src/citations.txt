@@ -1,0 +1,13 @@
+[
+    {
+        "title": "Testaus2",
+        "author": "Jaakko",
+        "year": "2024",
+        "tags": [
+            "test6"
+        ],
+        "cite_key": "Jaakko2024",
+        "journal": "Testeusta",
+        "doi": null
+    }
+]
