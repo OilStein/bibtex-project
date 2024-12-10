@@ -41,7 +41,6 @@ class Citation:
             f'@misc{{{self.cite_key},\n'
             f'\tauthor = "{self.author}",\n'
             f'\ttitle = "{self.title}",\n'
-            f'\tjournal = "{self.journal}",\n'
             f'\tyear = "{self.year}"\n'
             f'\ttags = "{self.tags}"\n'
             f'}}'

@@ -1,3 +1,6 @@
+import re
+from citation import Citation
+
 """ Database module for storing citations """
 
 class Citations:
@@ -30,11 +33,31 @@ class Citations:
         except IOError as e:
             print(f"Error saving to file: {e}")
 
+    def export_to_file(self, filename: str):
+        """Save citations to a file"""
+        try:
+            with open(filename, 'w', encoding='utf-8') as file:
+                for citation in self.citations:
+                    file.write(citation.print_as_bibtex() + '\n')
+            print(f"Citations saved to {filename}")
+        except IOError as e:
+            print(f"Error saving to file: {e}")
+
     def load_from_file(self, filename: str):
         """Load citations from a file"""
         try:
             with open(filename, 'r', encoding='utf-8') as file:
                 self.citations = [line.strip() for line in file.readlines()]
+        except FileNotFoundError:
+            print("File not found")
+        except IOError as e:
+            print(f"Error loading from file {e}")
+
+    def import_from_file(self, filename: str):
+        """Load citations from a file"""
+        try:
+            with open(filename, 'r', encoding='utf-8') as file:
+                self.citations = [Citation.from_bib(entry) for entry in re.findall(r'@article\{[^}]*\}', file.read(), re.DOTALL)]
         except FileNotFoundError:
             print("File not found")
         except IOError as e:

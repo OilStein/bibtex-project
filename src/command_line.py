@@ -16,14 +16,17 @@ def start(db, filename="citations.txt"):
     print("Commands: new, list, tag, save, load, quit")
     while True:
         command = input("Enter a command: ")
+
         if command == "new":
             info = get_article_info()
             db.add_citation(info)
+
         elif command == "list":
             print("Article Information:")
             # Listaa viitteet tietokannasta simpplisiti, jotta tägit voidaan liittää helpommin
             # lyhenne, otsikko, vuosi, tagit
             print_citation_list(db)
+
         elif command == "tag": # Tägätään jokin viite.
             # Anna viitteen lyhenne
             cite_key = input("Enter the citation key: ")
@@ -41,11 +44,25 @@ def start(db, filename="citations.txt"):
         elif command == "save":
             db.save_to_file(filename)
             print("Citations saved.")
+
         elif command == "load":
             db.load_from_file(filename)
             print("Citations loaded.")
+
+        elif command == "export":
+            export_filename = input("Filename to export: ")
+            if export_filename[-4:] != ".bib":
+                export_filename += ".bib"
+            db.export_to_file(export_filename)
+
+        elif command == "import":
+            import_filename = input("Filename to import: ")
+            if import_filename[-4:] != ".bib":
+                import_filename += ".bib"
+            db.import_from_file(import_filename)
         elif command == "quit":
             break
+
         else:
             print("Invalid command. Please try again.")
 
