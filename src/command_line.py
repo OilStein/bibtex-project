@@ -9,11 +9,13 @@ Functions:
 """
 import article
 
-def start(db, filename="src/citations.txt"):
+# pylint: disable=too-many-branches
+# pylint: disable=too-many-statements
+def start(db, filename="data/citations.txt"):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
-    print("Commands: new, list, tag, save, load, quit, edit")
+    print("Commands: new, list, tag, save, load, quit, edit, bibtex")
     while True:
         command = input("Enter a command: ")
         if command == "new":
@@ -57,16 +59,27 @@ def start(db, filename="src/citations.txt"):
                 citation.add_tag(tag.strip())
 
         elif command == "save":
-            db.save_to_file(filename)
-            print("Citations saved.")
+            filename = input("Enter the filename: ")
+            if filename == "":
+                filename = "citations"
+            db.save_to_file(f"data/{filename}.txt")
+
         elif command == "load":
-            db.load_from_file(filename)
-            print("Citations loaded.")
+            filename= input("Enter the filename: ")
+            if filename == "":
+                print("No filename entered.")
+                continue
+            db.load_from_file(f"data/{filename}")
+
+        elif command == "bibtex":
+            filename = input("Enter the filename: ")
+            if filename == "":
+                filename = "bibtex"
+            db.save_as_bibtex(f"data/{filename}.bib")
         elif command == "quit":
             break
         else:
             print("Invalid command. Please try again.")
-
 
 
 def get_article_info():

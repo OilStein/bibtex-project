@@ -45,7 +45,20 @@ class Citations:
                         citation = citation.Citation(data['title'], data['author'], data['year'])
                     citation.tags = data.get('tags', [])
                     self.citations.append(citation)
+            print("Citations loaded")
         except FileNotFoundError:
             print("File not found")
         except IOError as e:
             print(f"Error loading from file {e}")
+
+
+    def save_as_bibtex(self, filename: str):
+        """Save citations to a BibTeX file"""
+        try:
+            with open(filename, 'w', encoding='utf-8') as file:
+                for citation in self.citations:
+                    file.write(citation.to_bibtex())
+                    file.write("\n\n")
+            print(f"Citations saved to {filename}")
+        except IOError as e:
+            print(f"Error saving to file: {e}")

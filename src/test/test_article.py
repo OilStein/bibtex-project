@@ -48,7 +48,7 @@ class TestArticle(unittest.TestCase):
 \tjournal = "Journal of Test cases",
 \tyear = "2024"
 }"""
-        self.assertEqual(article_obj.print_as_bibtex(), article_as_bibtex)
+        self.assertEqual(article_obj.to_bibtex(), article_as_bibtex)
 
     def test_print_as_bibtex_multiple_authors(self):
         """ 
@@ -65,4 +65,4 @@ class TestArticle(unittest.TestCase):
 \tjournal = "Journal of Test cases",
 \tyear = "2024"
 }"""
-        self.assertEqual(article_obj.print_as_bibtex(), article_as_bibtex)
+        self.assertEqual(article_obj.to_bibtex(), article_as_bibtex)

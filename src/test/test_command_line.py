@@ -27,7 +27,7 @@ class TestCommandLine(TestCase):
         self.assertListEqual(
             mocked_print.mock_calls,
               [mock.call('Welcome to the citation database!'),
-                mock.call('Commands: new, list, tag, save, load, quit, edit'),
+                mock.call('Commands: new, list, tag, save, load, quit, edit, bibtex'),
                 mock.call('Article Information:'),
                 mock.call(
                     'Doe2023, Sample Article, John Doe, Journal of Testing, 2023, [\'Java\']'
@@ -50,7 +50,7 @@ class TestCommandLine(TestCase):
     @mock.patch('command_line.input', create=True)
     def test_start_save(self, mocked_input, mocked_print):
         """ This method tests the start methods save of the command_line module. """
-        mocked_input.side_effect = ["save", "xd", "quit"]
+        mocked_input.side_effect = ["save", "testi", "xd", "quit"]
         db = Citations()
         art = Article("John Doe", "Sample Article", "Journal of Testing", "2023")
         art.add_tag("Java")
@@ -60,13 +60,15 @@ class TestCommandLine(TestCase):
         self.assertListEqual(
             mocked_print.mock_calls,
               [mock.call('Welcome to the citation database!'),
-                mock.call('Commands: new, list, tag, save, load, quit, edit'),
-                mock.call('Citations saved.'),
-                mock.call('Invalid command. Please try again.')])
+                mock.call('Commands: new, list, tag, save, load, quit, edit, bibtex'),
+                #mock.call('Citations saved to data/testi.txt'),
+                mock.call('Invalid command. Please try again.')
+                ])
 
         self.assertListEqual(
             mocked_input.mock_calls, [
                 mock.call("Enter a command: "),
+                mock.call("Enter the filename: "),
                 mock.call("Enter a command: "),
                 mock.call("Enter a command: ")])
 
@@ -74,20 +76,21 @@ class TestCommandLine(TestCase):
     @mock.patch('command_line.input', create=True)
     def test_start_load(self, mocked_input, mocked_print):
         """ This method tests the start methods save of the command_line module. """
-        mocked_input.side_effect = ["load", "quit"]
+        mocked_input.side_effect = ["load","dummy_data", "quit"]
         db = Citations()
         command_line.start(db)
         self.assertListEqual(
             mocked_print.mock_calls,
               [mock.call('Welcome to the citation database!'),
-                mock.call('Commands: new, list, tag, save, load, quit, edit'),
-                mock.call('Citations loaded.'),
+                mock.call('Commands: new, list, tag, save, load, quit, edit, bibtex'),
+                # mock.call('Citations loaded.'),
               ])
 
 
         self.assertListEqual(
             mocked_input.mock_calls, [
                 mock.call("Enter a command: "),
+                mock.call("Enter the filename: "),
                 mock.call("Enter a command: "),
                 ])
 
@@ -105,7 +108,7 @@ class TestCommandLine(TestCase):
         self.assertListEqual(
             mocked_print.mock_calls,
               [mock.call('Welcome to the citation database!'),
-                mock.call('Commands: new, list, tag, save, load, quit, edit'),
+                mock.call('Commands: new, list, tag, save, load, quit, edit, bibtex'),
                 mock.call('Citation not found.')
               ])
 
