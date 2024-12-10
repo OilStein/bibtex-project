@@ -69,7 +69,6 @@ class TestCommandLine(TestCase):
                 mock.call("Enter a command: "),
                 mock.call("Enter a command: "),
                 mock.call("Enter a command: ")])
-        
 
     @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
