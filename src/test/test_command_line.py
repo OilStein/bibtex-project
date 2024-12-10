@@ -153,7 +153,7 @@ class TestCommandLine(TestCase):
 
         self.assertListEqual(mocked_print.mock_calls, [
             mock.call('Welcome to the citation database!'),
-            mock.call('Commands: new, list, tag, save, load, quit, edit'),
+            mock.call('Commands: new, list, tag, save, load, quit, edit, bibtex'),
             mock.call('Leave the field blank to keep the current value.'),
             mock.call('Citation updated successfully.')])
 
@@ -197,7 +197,7 @@ class TestCommandLine(TestCase):
 
         self.assertListEqual(mocked_print.mock_calls, [
             mock.call('Welcome to the citation database!'),
-            mock.call('Commands: new, list, tag, save, load, quit, edit'),
+            mock.call('Commands: new, list, tag, save, load, quit, edit, bibtex'),
             mock.call('Citation not found.')])
 
         self.assertListEqual(mocked_input.mock_calls, [
@@ -237,7 +237,7 @@ class TestCommandLine(TestCase):
 
         self.assertListEqual(mocked_print.mock_calls, [
             mock.call('Welcome to the citation database!'),
-            mock.call('Commands: new, list, tag, save, load, quit, edit'),
+            mock.call('Commands: new, list, tag, save, load, quit, edit, bibtex'),
             mock.call('Leave the field blank to keep the current value.'),
             mock.call('Citation updated successfully.')])
 
