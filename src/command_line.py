@@ -9,7 +9,7 @@ Functions:
 """
 import article
 
-def start(db, filename="citations.txt"):
+def start(db, filename="src/citations.txt"):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
