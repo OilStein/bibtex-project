@@ -13,7 +13,7 @@ def start(db, filename="citations.txt"):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
-    print("Commands: new, list, tag, save, load, quit")
+    print("Commands: new, list, tag, save, load, quit, edit")
     while True:
         command = input("Enter a command: ")
         if command == "new":
@@ -24,6 +24,23 @@ def start(db, filename="citations.txt"):
             # Listaa viitteet tietokannasta simpplisiti, jotta tägit voidaan liittää helpommin
             # lyhenne, otsikko, vuosi, tagit
             print_citation_list(db)
+        elif command == "edit":
+            cite_key = input("Enter the citation key of the citation to edit: ")
+            citation = db.get_one_citation(cite_key)
+            if citation is None:
+                print("Citation not found.")
+                continue
+                
+            print("Leave the field blank to keep the current value.")
+            new_title = input(f"Enter new title (current: {citation.title}): ") or citation.title
+            new_author = input(f"Enter new author(s) (current: {citation.author}): ") or citation.author
+            new_year = input(f"Enter new year (current: {citation.year}): ") or citation.year
+
+            citation.title = new_title
+            citation.author = new_author
+            citation.year = new_year
+            print("Citation updated successfully.")
+            
         elif command == "tag": # Tägätään jokin viite.
             # Anna viitteen lyhenne
             cite_key = input("Enter the citation key: ")
@@ -48,6 +65,7 @@ def start(db, filename="citations.txt"):
             break
         else:
             print("Invalid command. Please try again.")
+
 
 
 def get_article_info():

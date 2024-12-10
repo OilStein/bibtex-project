@@ -1,4 +1,6 @@
 """ Database module for storing citations """
+from article import Article
+import json
 
 class Citations:
     """ Class for storing citations """
@@ -21,26 +23,44 @@ class Citations:
         return self.citations
 
     def save_to_file(self, filename: str):
-        """Save citations to a file"""
         try:
             with open(filename, 'w', encoding='utf-8') as file:
                 for citation in self.citations:
-                    file.write(str(citation) + '\n')
+                    citation_dict = {
+                        "cite_key": citation.cite_key,
+                        "title": citation.title,
+                        "author": citation.author,
+                        "journal": getattr(citation, "journal", ""),
+                        "year": citation.year,
+                        "tags": citation.tags
+                    }
+                    file.write(json.dumps(citation_dict) + '\n')
             print(f"Citations saved to {filename}")
         except IOError as e:
             print(f"Error saving to file: {e}")
 
     def load_from_file(self, filename: str):
-        """Load citations from a file"""
         try:
             with open(filename, 'r', encoding='utf-8') as file:
-                self.citations = [line.strip() for line in file.readlines()]
+                self.citations = []
+                for line in file:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        citation_dict = json.loads(line)
+                        article = Article(
+                            citation_dict["author"],
+                            citation_dict["title"],
+                            citation_dict["journal"],
+                            citation_dict["year"]
+                        )
+                        article.tags = citation_dict["tags"]
+                        self.citations.append(article)
+                    except json.JSONDecodeError as e:
+                        print(f"Error decoding JSON: {e}. Skipping line: {line}")
+            print(f"Citations loaded from {filename}")
         except FileNotFoundError:
             print("File not found")
         except IOError as e:
             print(f"Error loading from file {e}")
-
-    def print_citations(self):
-        """ Print citations """
-        for citation in self.citations:
-            print(citation)
