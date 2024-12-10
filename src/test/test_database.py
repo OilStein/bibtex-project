@@ -27,7 +27,8 @@ class TestCitations(unittest.TestCase):
         article_obj = Article("Test person", "Test title", "Test journal", "2024")
         self.db.add_citation(article_obj)
 
-        with patch("builtins.open", mock_open()) as mocked_file, patch("json.dump") as mock_json_dump:
+        with patch(
+            "builtins.open", mock_open()) as mocked_file, patch("json.dump") as mock_json_dump:
             self.db.save_to_file(self.filename)
 
             mocked_file.assert_called_with(self.filename, 'w', encoding= "utf-8")
@@ -36,7 +37,7 @@ class TestCitations(unittest.TestCase):
             mock_json_dump.assert_called_once_with(
                 [article_obj.to_dict()], handle, indent=4
             )
-    
+
     def test_load_from_file(self):
         """Test loading from a file"""
         mock_data = json.dumps([

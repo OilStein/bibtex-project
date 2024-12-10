@@ -1,6 +1,6 @@
 """ Database module for storing citations """
-import article
 import json
+import article
 
 class Citations:
     """ Class for storing citations """
@@ -39,7 +39,8 @@ class Citations:
                 self.citations = []
                 for data in citations_data:
                     if 'journal' in data:
-                        citation = article.Article(data['author'], data['title'], data['journal'], data['year'])
+                        citation = article.Article(data['author'], data['title'],
+                                                   data['journal'], data['year'])
                     else:
                         citation = citation.Citation(data['title'], data['author'], data['year'])
                     citation.tags = data.get('tags', [])

@@ -30,17 +30,18 @@ def start(db, filename="citations.txt"):
             if citation is None:
                 print("Citation not found.")
                 continue
-                
+
             print("Leave the field blank to keep the current value.")
             new_title = input(f"Enter new title (current: {citation.title}): ") or citation.title
-            new_author = input(f"Enter new author(s) (current: {citation.author}): ") or citation.author
+            new_author = input(
+                f"Enter new author(s) (current: {citation.author}): ") or citation.author
             new_year = input(f"Enter new year (current: {citation.year}): ") or citation.year
 
             citation.title = new_title
             citation.author = new_author
             citation.year = new_year
             print("Citation updated successfully.")
-            
+
         elif command == "tag": # Tägätään jokin viite.
             # Anna viitteen lyhenne
             cite_key = input("Enter the citation key: ")
