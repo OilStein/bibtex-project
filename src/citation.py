@@ -11,13 +11,10 @@ class Citation:
         self.tags = kwargs.get("tags", [""])
         self.cite_key = self.generate_cite_key()
 
-    def __init__(self, bibtex):
-        data = self.parse_bibtex_entry(bibtex)
-        self.title = data["title"]
-        self.author = data["author"]
-        self.year = data["year"]
-        self.tags = data.get("tags", [""])
-        self.cite_key = self.generate_cite_key()
+    @classmethod
+    def from_bib(cls, bibtex):
+        data = Citation.parse_bibtex_entry(bibtex)
+        return cls(**data)
 
     def add_tag(self, tag):
         """Add a tag to the citation"""
@@ -50,7 +47,8 @@ class Citation:
             f'}}'
         )
 
-    def parse_bibtex_entry(self, bibtex_str):
+    @classmethod
+    def parse_bibtex_entry(cls, bibtex_str):
         # Define a regex pattern to match the BibTeX fields
         pattern = r'(?P<key>@article\{(?P<identifier>[^,]+),\s*(?P<fields>.+?)\s*\})'
         match = re.search(pattern, bibtex_str, re.DOTALL)
@@ -81,5 +79,5 @@ if __name__ == "__main__":
         journal = "Journal of Testing",
         year = "2023"
 }"""
-    obj = Citation(bibtex_str)
+    obj = Citation.from_bib(bibtex_str)
     print(str(obj))
