@@ -26,7 +26,7 @@ class TestCommandLine(TestCase):
         self.assertListEqual(
             mocked_print.mock_calls,
               [mock.call('Welcome to the citation database!'),
-                mock.call('Commands: new, list, tag, save, load, quit'),
+                mock.call('Commands: new, list, tag, save, load, quit, edit'),
                 mock.call('Article Information:'),
                 mock.call(
                     'Doe2023, Sample Article, John Doe, Journal of Testing, 2023, [\'Java\']'

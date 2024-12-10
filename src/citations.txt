@@ -1,0 +1,14 @@
+[
+    {
+        "title": "TestiEdit",
+        "author": "Jaakko",
+        "year": "2024",
+        "tags": [
+            "test",
+            "lisays"
+        ],
+        "cite_key": "Jaakko2024",
+        "journal": "Testaus",
+        "doi": null
+    }
+]

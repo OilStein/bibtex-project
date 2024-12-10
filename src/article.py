@@ -14,7 +14,14 @@ class Article(citation.Citation):
                 f"{self.author}, {self.journal}, {self.year}, {self.tags}"
         )
 
-
+    def to_dict(self):
+        """Convert to dictionary"""
+        data = super().to_dict()
+        data.update({
+            "journal": self.journal,
+            "doi": self.doi
+        })
+        return data
 
     def print_as_bibtex(self):
         """Prints the article in BibTeX format."""
