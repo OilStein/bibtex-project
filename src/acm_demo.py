@@ -42,4 +42,4 @@ while True:
 #     })
 
 
-# print(r.json()["items"])
+# print(r.json()["items"][0][doi])
