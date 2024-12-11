@@ -15,7 +15,7 @@ def start(db, filename="data/citations.txt"):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
-    print("Commands: new, list, tag, save, load, quit, edit, bibtex")
+    print("Commands: new, list, tag, save, load, quit, edit, load bibtex, save bibtex")
     while True:
         command = input("Enter a command: ")
 
