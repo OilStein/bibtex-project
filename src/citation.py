@@ -67,6 +67,16 @@ class Citation:
                     
             return {'identifier': identifier, **fields}
 
+    def to_dict(self):
+        """Convert to a dictionary"""
+        return {
+            "title": self.title,
+            "author": self.author,
+            "year": self.year,
+            "tags": self.tags,
+            "cite_key": self.cite_key
+        }
+
     def __str__(self):
         return f"{self.cite_key}, {self.title}, {self.author}, {self.year}, {self.tags}"
 

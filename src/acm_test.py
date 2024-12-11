@@ -25,6 +25,8 @@ while True:
 
         refs.append(obj)
 
+        print(data)
+
     elif c == "list":
         for ref in refs:
             print(ref.print_as_bibtex())

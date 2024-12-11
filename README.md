@@ -26,4 +26,10 @@ Repositorio: https://github.com/OilStein/bibtex-project
 - **1. Kloonaa github**
 - **2. Mene hakemistoon, johon kloonasit sovelluksen**
 - **3. Aja sovellus hakemistosta komennolla (python main.py)**
-- **4. Komennot: new (lisää uusi artikkeli), list (näyttää tallennetut artikkelit), quit (sovellus sulkeutuu)**
+- **4. Komennot:**
+    - **new (lisää uusi artikkeli)**
+    - **list (näyttää tallennetut artikkelit)**
+    - **save (tallentaa listan näyttämät artikkelit)**
+    - **load (lataa artikkeleita tiedostosta)**
+    - **bibtex (kirjoittaa .bib loppuisen bibtex-tiedoston)**
+    - **quit (sovellus sulkeutuu)**

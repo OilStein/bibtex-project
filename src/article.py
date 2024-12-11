@@ -14,10 +14,17 @@ class Article(citation.Citation):
                 f"{self.author}, {self.journal}, {self.year}, {self.tags}"
         )
 
+    def to_dict(self):
+        """Convert to dictionary"""
+        data = super().to_dict()
+        data.update({
+            "journal": self.journal,
+            "doi": self.doi
+        })
+        return data
 
-
-    def print_as_bibtex(self):
-        """Prints the article in BibTeX format."""
+    def to_bibtex(self):
+        """Format the article in BibTeX format."""
         return (
             f'@article{{{self.cite_key},\n'
             f'\tauthor = "{self.author}",\n'
@@ -37,7 +44,7 @@ def main(): #pragma: no cover
     article = Article(authors, title, journal, year)
     article.add_tag("test")
     print(article)
-    print(article.print_as_bibtex())
+    print(article.to_bibtex())
 
 if __name__ == "__main__": #pragma: no cover
     main()

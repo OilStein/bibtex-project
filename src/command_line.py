@@ -9,11 +9,13 @@ Functions:
 """
 import article
 
-def start(db, filename="citations.txt"):
+# pylint: disable=too-many-branches
+# pylint: disable=too-many-statements
+def start(db, filename="data/citations.txt"):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
-    print("Commands: new, list, tag, save, load, quit")
+    print("Commands: new, list, tag, save, load, quit, edit, bibtex")
     while True:
         command = input("Enter a command: ")
 
@@ -26,6 +28,23 @@ def start(db, filename="citations.txt"):
             # Listaa viitteet tietokannasta simpplisiti, jotta tägit voidaan liittää helpommin
             # lyhenne, otsikko, vuosi, tagit
             print_citation_list(db)
+        elif command == "edit":
+            cite_key = input("Enter the citation key of the citation to edit: ")
+            citation = db.get_one_citation(cite_key)
+            if citation is None:
+                print("Citation not found.")
+                continue
+
+            print("Leave the field blank to keep the current value.")
+            new_title = input(f"Enter new title (current: {citation.title}): ") or citation.title
+            new_author = input(
+                f"Enter new author(s) (current: {citation.author}): ") or citation.author
+            new_year = input(f"Enter new year (current: {citation.year}): ") or citation.year
+
+            citation.title = new_title
+            citation.author = new_author
+            citation.year = new_year
+            print("Citation updated successfully.")
 
         elif command == "tag": # Tägätään jokin viite.
             # Anna viitteen lyhenne
@@ -42,24 +61,24 @@ def start(db, filename="citations.txt"):
                 citation.add_tag(tag.strip())
 
         elif command == "save":
-            db.save_to_file(filename)
-            print("Citations saved.")
+            filename = input("Enter the filename: ")
+            if filename == "":
+                filename = "citations"
+            db.save_to_file(f"data/{filename}.txt")
 
         elif command == "load":
-            db.load_from_file(filename)
-            print("Citations loaded.")
+            filename= input("Enter the filename: ")
+            if filename == "":
+                print("No filename entered.")
+                continue
+            db.load_from_file(f"data/{filename}")
 
-        elif command == "export":
-            export_filename = input("Filename to export: ")
-            if export_filename[-4:] != ".bib":
-                export_filename += ".bib"
-            db.export_to_file(export_filename)
-
-        elif command == "import":
-            import_filename = input("Filename to import: ")
-            if import_filename[-4:] != ".bib":
-                import_filename += ".bib"
-            db.import_from_file(import_filename)
+        elif command == "bibtex":
+            filename = input("Enter the filename: ")
+            if filename == "":
+                filename = "bibtex"
+            db.save_as_bibtex(f"data/{filename}.bib")
+        
         elif command == "quit":
             break
 
