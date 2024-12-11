@@ -73,11 +73,17 @@ def start(db, filename="data/citations.txt"):
                 continue
             db.load_from_file(f"data/{filename}")
 
-        elif command == "bibtex":
+        elif command == "save bibtex":
             filename = input("Enter the filename: ")
             if filename == "":
                 filename = "bibtex"
             db.save_as_bibtex(f"data/{filename}.bib")
+
+        elif command == "load bibtex":
+            filename = input("Enter the filename: ")
+            if filename == "":
+                filename = "bibtex"
+            db.load_from_bibtex(f"data/{filename}.bib")
         
         elif command == "quit":
             break

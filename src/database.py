@@ -34,16 +34,6 @@ class Citations:
         except IOError as e:
             print(f"Error saving to file: {e}")
 
-    def export_to_file(self, filename: str):
-        """Save citations to a file"""
-        try:
-            with open(filename, 'w', encoding='utf-8') as file:
-                for citation in self.citations:
-                    file.write(citation.print_as_bibtex() + '\n')
-            print(f"Citations saved to {filename}")
-        except IOError as e:
-            print(f"Error saving to file: {e}")
-
     def load_from_file(self, filename: str):
         """Load citations from a file in JSON"""
         try:
@@ -64,8 +54,8 @@ class Citations:
         except IOError as e:
             print(f"Error loading from file {e}")
 
-    def import_from_file(self, filename: str):
-        """Load citations from a file"""
+    def load_from_bibtex(self, filename: str):
+        """load citations from a BibTeX file"""
         try:
             with open(filename, 'r', encoding='utf-8') as file:
                 self.citations = [Citation.from_bib(entry) for entry in re.findall(r'@article\{[^}]*\}', file.read(), re.DOTALL)]
