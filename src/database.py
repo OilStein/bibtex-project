@@ -55,7 +55,7 @@ class Citations:
             print(f"Error loading from file {e}")
 
     def load_from_bibtex(self, filename: str):
-        """load citations from a BibTeX file"""
+        """Load citations from a BibTeX file"""
         try:
             with open(filename, 'r', encoding='utf-8') as file:
                 self.citations = [Citation.from_bib(entry) for entry in re.findall(r'@article\{[^}]*\}', file.read(), re.DOTALL)]
