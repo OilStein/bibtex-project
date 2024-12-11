@@ -84,7 +84,7 @@ def start(db, filename="data/citations.txt"):
             if filename == "":
                 filename = "bibtex"
             db.load_from_bibtex(f"data/{filename}.bib")
-        
+
         elif command == "quit":
             break
 

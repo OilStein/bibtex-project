@@ -1,9 +1,8 @@
-import re
-from citation import Citation
-
 """ Database module for storing citations """
 import json
+import re
 import article
+from citation import Citation
 
 class Citations:
     """ Class for storing citations """
@@ -58,7 +57,8 @@ class Citations:
         """Load citations from a BibTeX file"""
         try:
             with open(filename, 'r', encoding='utf-8') as file:
-                self.citations = [Citation.from_bib(entry) for entry in re.findall(r'@article\{[^}]*\}', file.read(), re.DOTALL)]
+                entries = re.findall(r'@article\{[^}]*\}', file.read(), re.DOTALL)
+                self.citations = [Citation.from_bib(entry) for entry in entries]
         except FileNotFoundError:
             print("File not found")
         except IOError as e:

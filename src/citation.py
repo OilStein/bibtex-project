@@ -1,6 +1,6 @@
+""" Super class for all citation objects. """
 import re
 
-""" Super class for all citation objects. """
 
 class Citation:
     """Class for citation object"""
@@ -13,6 +13,7 @@ class Citation:
 
     @classmethod
     def from_bib(cls, bibtex):
+        """Class method for creating citations from bibtex"""
         data = Citation.parse_bibtex_entry(bibtex)
         return cls(**data)
 
@@ -48,6 +49,7 @@ class Citation:
 
     @classmethod
     def parse_bibtex_entry(cls, bibtex_str):
+        """Class method for parsing bibtex into a dict"""
         # Define a regex pattern to match the BibTeX fields
         pattern = r'(?P<key>@article\{(?P<identifier>[^,]+),\s*(?P<fields>.+?)\s*\})'
         match = re.search(pattern, bibtex_str, re.DOTALL)
@@ -55,7 +57,7 @@ class Citation:
         if match:
             identifier = match.group('identifier')
             fields_str = match.group('fields')
-            
+
             # Now we need to extract key-value pairs from the fields
             fields = {}
             for line in fields_str.split(','):
@@ -64,8 +66,9 @@ class Citation:
                     key = key_value[0].strip()
                     value = key_value[1].strip().strip('"').strip()
                     fields[key] = value
-                    
+
             return {'identifier': identifier, **fields}
+        return {}
 
     def to_dict(self):
         """Convert to a dictionary"""
@@ -82,11 +85,11 @@ class Citation:
 
 
 if __name__ == "__main__":
-    bibtex_str = """@article{Doe2023,
+    BIB_STR = """@article{Doe2023,
         author = "John Doe",
         title = "Sample Article",
         journal = "Journal of Testing",
         year = "2023"
 }"""
-    obj = Citation.from_bib(bibtex_str)
+    obj = Citation.from_bib(BIB_STR)
     print(str(obj))

@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import requests
 from citation import Citation
 
