@@ -64,7 +64,6 @@ class Citations:
         except IOError as e:
             print(f"Error loading from file {e}")
 
-<<<<<<< HEAD
     def import_from_file(self, filename: str):
         """Load citations from a file"""
         try:
@@ -75,11 +74,6 @@ class Citations:
         except IOError as e:
             print(f"Error loading from file {e}")
 
-    def print_citations(self):
-        """ Print citations """
-        for citation in self.citations:
-            print(citation)
-=======
 
     def save_as_bibtex(self, filename: str):
         """Save citations to a BibTeX file"""
@@ -91,4 +85,3 @@ class Citations:
             print(f"Citations saved to {filename}")
         except IOError as e:
             print(f"Error saving to file: {e}")
->>>>>>> 087346ba0f184257f52131179ee3d61d0bd826f2
