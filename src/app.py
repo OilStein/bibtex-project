@@ -36,7 +36,7 @@ def post_citation():
         db.add_citation(data)
         citation = db.get_one_citation(data['cite_key'])
         return json.dumps(citation.to_dict()), 201
-    except Exception as e:
+    except KeyError as e:
         return {"error": str(e)}, 500
 
 
