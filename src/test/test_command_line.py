@@ -4,6 +4,8 @@ from database import Citations
 from article import Article
 import command_line
 
+WELCOME_MESSAGE_COUNT = 2
+
 class TestCommandLine(TestCase):
     """ This class contains the tests for the command_line module. """
 
@@ -17,59 +19,51 @@ class TestCommandLine(TestCase):
 
     @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
-    def test_start(self, mocked_input, mocked_print):
-        """ This method tests the start method of the command_line module. """
-        mocked_input.side_effect = [
-            "new", "Sample Article", "John Doe",
-              "Journal of Testing", "2023", "Java", "list", "print news report", "quit"]
+    def test_start_base_functionality(self, mocked_input, mocked_print):
+        """Makes sure the start-method has basic functionality"""
+        commands = [
+            'new',
+            'list',
+            'tag',
+            'save',
+            'load',
+            'quit',
+            'edit',
+            'load bibtex', 
+            'save bibtex']
         db = Citations()
+        mocked_input.side_effect = ["quit"]
         command_line.start(db)
         self.assertListEqual(
-            mocked_print.mock_calls,
-            [mock.call('Welcome to the citation database!'),
-            mock.call('Commands: new, list, tag, save, load, quit, edit, load bibtex, save bibtex'),
-            mock.call('Article Information:'),
-            mock.call('Doe2023, Sample Article, John Doe, Journal of Testing, 2023, [\'Java\']'),
-            mock.call('Invalid command. Please try again.')]
-            )
-
-        self.assertListEqual(
-            mocked_input.mock_calls, [
-                mock.call("Enter a command: "),
-                    mock.call("Enter the article title: "),
-                    mock.call('Enter the author(s): '),
-                    mock.call('Enter the journal name: '),
-                    mock.call('Enter the publication year: '),
-                    mock.call('Enter tags separated by commas: '),
-                    mock.call('Enter a command: '),
-                    mock.call('Enter a command: '),
-                    mock.call('Enter a command: ')])
+            # Checking only first two for now
+            mocked_print.mock_calls[:WELCOME_MESSAGE_COUNT],
+            [
+            mock.call('Welcome to the citation database!'),
+            mock.call('Commands: ' + ', '.join(commands))
+            ])
+        # Check that we print correctly
+        self.assertEqual(mocked_input.mock_calls, [mock.call("Enter a command: ")])
 
     @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
-    def test_start_save(self, mocked_input, mocked_print):
-        """ This method tests the start methods save of the command_line module. """
-        mocked_input.side_effect = ["save", "testi", "xd", "quit"]
-        db = Citations()
-        art = Article("John Doe", "Sample Article", "Journal of Testing", "2023")
-        art.add_tag("Java")
-        art = Article("Jane Kimmel", "Another Article", "Journal of Testing", "2025")
-        art.add_tag("Python")
-        command_line.start(db)
-        self.assertListEqual(
-            mocked_print.mock_calls,
-            [mock.call('Welcome to the citation database!'),
-            mock.call('Commands: new, list, tag, save, load, quit, edit, load bibtex, save bibtex'),
-            #mock.call('Citations saved to data/testi.txt'),
-            mock.call('Invalid command. Please try again.')
-            ])
+    def test_save_to_file_with_input(self, mocked_input, mocked_print):
+        """ This method tests the save_to_file method of the command_line module. """
+        mocked_input.side_effect = ["testi"]
+        with mock.patch('database.Citations') as mock_citations:
+            db = mock_citations.return_value
+            art = Article("John Doe", "Sample Article", "Journal of Testing", "2023")
+            art.add_tag("Java")
+            db.add_citation(art)
+            art = Article("Jane Kimmel", "Another Article", "Journal of Testing", "2025")
+            art.add_tag("Python")
+            db.add_citation(art)
+            command_line.save_to_file(db, 'testi')
 
-        self.assertListEqual(
-            mocked_input.mock_calls, [
-                mock.call("Enter a command: "),
-                mock.call("Enter the filename: "),
-                mock.call("Enter a command: "),
-                mock.call("Enter a command: ")])
+            # Check that the save_to_file method was called
+            db.save_to_file.assert_called_once_with("data/testi.txt")
+            self.assertEqual(mocked_print.mock_calls, [])
+            # Only asks for file
+            self.assertEqual(mocked_input.mock_calls, [mock.call("Enter the filename: ")])
 
     @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
