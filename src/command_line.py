@@ -11,7 +11,7 @@ import article
 
 # pylint: disable=too-many-branches
 # pylint: disable=too-many-statements
-def start(db, filename="data/citations.txt"):
+def start(db):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
@@ -29,68 +29,90 @@ def start(db, filename="data/citations.txt"):
             # lyhenne, otsikko, vuosi, tagit
             print_citation_list(db)
         elif command == "edit":
-            cite_key = input("Enter the citation key of the citation to edit: ")
-            citation = db.get_one_citation(cite_key)
-            if citation is None:
-                print("Citation not found.")
-                continue
-
-            print("Leave the field blank to keep the current value.")
-            new_title = input(f"Enter new title (current: {citation.title}): ") or citation.title
-            new_author = input(
-                f"Enter new author(s) (current: {citation.author}): ") or citation.author
-            new_year = input(f"Enter new year (current: {citation.year}): ") or citation.year
-
-            citation.title = new_title
-            citation.author = new_author
-            citation.year = new_year
-            print("Citation updated successfully.")
-
+            edit_citation(db)
         elif command == "tag": # Tägätään jokin viite.
-            # Anna viitteen lyhenne
-            cite_key = input("Enter the citation key: ")
-            # Haetaan viite
-            citation = db.get_one_citation(cite_key)
-            if citation is None:
-                print("Citation not found.")
-                continue
-            # Anna tägi
-            tags = input("Enter the tags: ").split(",")
-            # Lisätään tägit
-            for tag in tags:
-                citation.add_tag(tag.strip())
-
+            add_tag(db)
         elif command == "save":
-            filename = input("Enter the filename: ")
-            if filename == "":
-                filename = "citations"
-            db.save_to_file(f"data/{filename}.txt")
-
+            save_to_file(db, "citations")
         elif command == "load":
-            filename= input("Enter the filename: ")
-            if filename == "":
-                print("No filename entered.")
-                continue
-            db.load_from_file(f"data/{filename}")
-
+            load_from_file(db)
         elif command == "save bibtex":
-            filename = input("Enter the filename: ")
-            if filename == "":
-                filename = "bibtex"
-            db.save_as_bibtex(f"data/{filename}.bib")
-
+            save_as_bibtex(db, 'bibtex')
         elif command == "load bibtex":
-            filename = input("Enter the filename: ")
-            if filename == "":
-                filename = "bibtex"
-            db.load_from_bibtex(f"data/{filename}.bib")
-
+            save_as_bibtex(db, 'bibtex')
         elif command == "quit":
             break
-
         else:
             print("Invalid command. Please try again.")
 
+def edit_citation(db):
+    """
+    Asks for a citation and edits its details
+    """
+    cite_key = input("Enter the citation key of the citation to edit: ")
+    citation = db.get_one_citation(cite_key)
+    if citation is None:
+        print("Citation not found.")
+        return
+    print("Leave the field blank to keep the current value.")
+    new_title = input(f"Enter new title (current: {citation.title}): ") or citation.title
+    new_author = input(
+        f"Enter new author(s) (current: {citation.author}): ") or citation.author
+    new_year = input(f"Enter new year (current: {citation.year}): ") or citation.year
+    citation.title = new_title
+    citation.author = new_author
+    citation.year = new_year
+    print("Citation updated successfully.")
+
+def add_tag(db):
+    """
+    Asks the user for a citation and the tags to add to it.
+    """
+    cite_key = input("Enter the citation key: ")
+    citation = db.get_one_citation(cite_key)
+    if citation is None:
+        print("Citation not found.")
+        return
+    tags = input("Enter the tags: ").split(",")
+    for tag in tags:
+        citation.add_tag(tag.strip())
+
+def save_to_file(db, default):
+    """
+    Asks the user to provide a file to save to.
+    """
+    filename = input("Enter the filename: ")
+    if filename == "":
+        filename = default
+    db.save_to_file(f"data/{filename}.txt")
+
+def load_from_file(db):
+    """
+    Asks the user to provide a file to load from.
+    """
+    filename= input("Enter the filename: ")
+    if filename == "":
+        print("No filename entered.")
+        return
+    db.load_from_file(f"data/{filename}")
+
+def save_as_bibtex(db, default):
+    """
+    Asks the user to provide a bibtex file to save to.
+    """
+    filename = input("Enter the filename: ")
+    if filename == "":
+        filename = default
+    db.save_as_bibtex(f"data/{filename}.bib")
+
+def load_from_bibtex(db, default):
+    """
+    Asks the user to provide a bibtex file to load from
+    """
+    filename = input("Enter the filename: ")
+    if filename == "":
+        filename = default
+    db.load_from_bibtex(f"data/{filename}.bib")
 
 def get_article_info():
     """
