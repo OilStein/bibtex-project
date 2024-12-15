@@ -20,14 +20,9 @@ def start(db):
         command = input("Enter a command: ")
 
         if command == "new":
-            info = get_article_info()
-            db.add_citation(info)
-
+            add_citation(db)
         elif command == "list":
-            print("Article Information:")
-            # Listaa viitteet tietokannasta simpplisiti, jotta tägit voidaan liittää helpommin
-            # lyhenne, otsikko, vuosi, tagit
-            print_citation_list(db)
+            list_citations(db)
         elif command == "edit":
             edit_citation(db)
         elif command == "tag": # Tägätään jokin viite.
@@ -39,11 +34,18 @@ def start(db):
         elif command == "save bibtex":
             save_as_bibtex(db, 'bibtex')
         elif command == "load bibtex":
-            save_as_bibtex(db, 'bibtex')
+            load_from_bibtex(db, 'bibtex')
         elif command == "quit":
             break
         else:
             print("Invalid command. Please try again.")
+
+def add_citation(db):
+    """
+    Asks the user for article information and adds it to the database.
+    """
+    article_obj = get_article_info()
+    db.add_citation(article_obj)
 
 def edit_citation(db):
     """
@@ -76,6 +78,13 @@ def add_tag(db):
     tags = input("Enter the tags: ").split(",")
     for tag in tags:
         citation.add_tag(tag.strip())
+
+def list_citations(db):
+    """Prints the list of citations in the database."""
+    print("Article Information:")
+    # Listaa viitteet tietokannasta simpplisiti, jotta tägit voidaan liittää helpommin
+    # lyhenne, otsikko, vuosi, tagit
+    print_citation_list(db)
 
 def save_to_file(db, default):
     """
