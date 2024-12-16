@@ -3,6 +3,7 @@ from test.test_citation import MockResponse
 from unittest import TestCase, mock
 from database import Citations
 from article import Article
+from citation import Citation
 import command_line
 
 WELCOME_MESSAGE_COUNT = 2
@@ -333,3 +334,33 @@ class TestCommandLine(TestCase):
 
         self.assertEqual(str(db.get_citations()[0]),
         "C.JeffreyMichaelAndrewChristopherJ.SanjayAndreyChristopherPeterWilsonSebastianEugeneHongyiAlexanderSergeyDavidDavidSeanRajeshLindsayYasushiMichalChristopherRuthDale2012, Spanner: Google's globally-distributed database, Corbett, James C. and Dean, Jeffrey and Epstein, Michael and Fikes, Andrew and Frost, Christopher and Furman, J. J. and Ghemawat, Sanjay and Gubarev, Andrey and Heiser, Christopher and Hochschild, Peter and Hsieh, Wilson and Kanthak, Sebastian and Kogan, Eugene and Li, Hongyi and Lloyd, Alexander and Melnik, Sergey and Mwaura, David and Nagle, David and Quinlan, Sean and Rao, Rajesh and Rolig, Lindsay and Saito, Yasushi and Szymaniak, Michal and Taylor, Christopher and Wang, Ruth and Woodford, Dale, 2012, ['']") # pylint: disable=line-too-long
+
+    @mock.patch('command_line.input', create=True)
+    def test_load_from_bibtex(self, mocked_input):
+        """Test for loading from .bib file"""
+        # pylint: disable=duplicate-code
+        mock_data = """@misc{Mikko2023,
+	author = "Mikko",
+	title = "Another Test",
+	journal = "Testing Journal",
+	year = "2023"
+}""" # pylint: enable=duplicate-code
+        mocked_input.side_effect = ["load bibtex", "test.bib", "quit"]
+        db = Citations()
+        with mock.patch("builtins.open", mock.mock_open(read_data=mock_data)):
+            command_line.start(db)
+        self.assertEqual(str(db.get_citations()[0]), "Mikko2023, Another Test, Mikko, 2023, ['']")
+
+    @mock.patch('command_line.input', create=True)
+    def test_save_as_bibtex(self, mocked_input):
+        """Test for saving as a .bib file"""
+        mocked_input.side_effect = ["save bibtex", "test.bib", "quit"]
+        db = Citations()
+        citation_obj = Citation("Another Test", "Mikko", 2023)
+        db.add_citation(citation_obj)
+        with mock.patch("builtins.open", mock.mock_open()) as mocked_file:
+            command_line.start(db)
+            self.assertIn(
+                mock.call().write('@misc{Mikko2023,\n\tauthor = "Mikko",\n\ttitle = "Another Test",\n\tyear = "2023",\n\ttags = "[\'\']"\n}'), # pylint: disable=line-too-long
+                mocked_file.mock_calls)
+            self.assertIn(mock.call().write('\n\n'), mocked_file.mock_calls)
