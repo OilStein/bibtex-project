@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import { TableContainer, Paper, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { TableContainer, Paper, Button, TextField } from '@mui/material';
 import CitationsTable from './CitationsTable';
 import CitationDialog from './CitationDialog';
+import DoiDialog from './DoiDialog';
 
 const App = () => {
   const proxy = 'http://127.0.0.1:5000/';
@@ -108,7 +109,7 @@ const App = () => {
 
   return (
     <div id="root">
-      <h1>Interactive Table</h1>
+      <h1>Bibtex Project</h1>
       <TextField
         label="Search"
         value={searchQuery}
@@ -142,26 +143,13 @@ const App = () => {
         onChange={handleInputChange}
         currentRow={currentRow}
       />
-      <Dialog open={isDoiDialogOpen} onClose={handleCloseDoiDialog}>
-        <DialogTitle>Add Entry via DOI</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="DOI"
-            value={doi}
-            onChange={handleDoiChange}
-            fullWidth
-            margin="normal"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDoiDialog} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveDoi} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DoiDialog
+        isOpen={isDoiDialogOpen}
+        onClose={handleCloseDoiDialog}
+        onSave={handleSaveDoi}
+        doi={doi}
+        onChange={handleDoiChange}
+      />
     </div>
   );
 };
