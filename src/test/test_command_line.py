@@ -1,4 +1,5 @@
 """Tests for command_line.py"""
+from test.test_citation import MockResponse
 from unittest import TestCase, mock
 from database import Citations
 from article import Article
@@ -314,3 +315,20 @@ class TestCommandLine(TestCase):
         edited_article = db.get_one_citation('Doe2023')
         self.assertEqual(str(edited_article),
                          "Doe2023, Changed Title, Jane Doe, Journal of Testing, 2023, ['']")
+
+
+    @mock.patch('requests.post', create=True)
+    @mock.patch('command_line.input', create=True)
+    def test_from_doi(self, mocked_input, mocked_post):
+        """Test for testing from doi ui"""
+
+        mocked_post.side_effect = [MockResponse()]
+
+        mocked_input.side_effect = ["from doi", "10.5555/2387880.2387905", "quit"]
+
+        db = Citations()
+
+        command_line.start(db)
+
+        self.assertEqual(str(db.get_citations()[0]),
+        "C.JeffreyMichaelAndrewChristopherJ.SanjayAndreyChristopherPeterWilsonSebastianEugeneHongyiAlexanderSergeyDavidDavidSeanRajeshLindsayYasushiMichalChristopherRuthDale2012, Spanner: Google's globally-distributed database, Corbett, James C. and Dean, Jeffrey and Epstein, Michael and Fikes, Andrew and Frost, Christopher and Furman, J. J. and Ghemawat, Sanjay and Gubarev, Andrey and Heiser, Christopher and Hochschild, Peter and Hsieh, Wilson and Kanthak, Sebastian and Kogan, Eugene and Li, Hongyi and Lloyd, Alexander and Melnik, Sergey and Mwaura, David and Nagle, David and Quinlan, Sean and Rao, Rajesh and Rolig, Lindsay and Saito, Yasushi and Szymaniak, Michal and Taylor, Christopher and Wang, Ruth and Woodford, Dale, 2012, ['']") # pylint: disable=line-too-long
