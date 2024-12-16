@@ -96,6 +96,28 @@ const App = () => {
     );
   };
 
+  const handleDownloadBibtex = () => {
+    fetch(proxy + 'bibtex', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ keys: selectedCitations }),
+    })
+      .then((res) => res.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'citations.bib';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((err) => console.log(err));
+  };
+
   const filteredData = data.filter((row) => {
     return (
       row.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -124,6 +146,9 @@ const App = () => {
         </Button>
         <Button variant="contained" color="secondary" onClick={handleOpenDoiDialog}>
           Add via DOI
+        </Button>
+        <Button variant="contained" color="default" onClick={handleDownloadBibtex}>
+          Download Bibtex
         </Button>
       </div>
       <TableContainer component={Paper} className="table-container">
