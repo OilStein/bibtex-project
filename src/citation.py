@@ -1,5 +1,6 @@
 """ Super class for all citation objects. """
 import re
+import requests
 
 
 class Citation:
@@ -16,6 +17,19 @@ class Citation:
         """Class method for creating citations from bibtex"""
         data = Citation.parse_bibtex_entry(bibtex)
         return cls(**data)
+
+    @classmethod
+    def from_doi(cls, doi):
+        """Class method for creating citations from bibtex"""
+        data = requests.post('https://dl.acm.org/action/exportCiteProcCitation', data={
+        'dois': doi,
+        'targetFile': 'custom-bibtex',
+        'format': 'bibTex'
+        }).json()["items"][0][doi]
+
+        author = " and ".join([f"{person['family']}, {person['given']}" for person in data["author"]])
+
+        return cls(data["title"], author, data["original-date"]["date-parts"][0][0])
 
     def add_tag(self, tag):
         """Add a tag to the citation"""
