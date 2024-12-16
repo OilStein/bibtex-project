@@ -33,7 +33,7 @@ class Citation:
             }).json()["items"][0][doi]
 
             author = " and ".join([
-                f"{person['family']}, {person['given']}" 
+                f"{person['family']}, {person['given']}"
                 for person in data["author"]
                 ])
 
@@ -56,10 +56,8 @@ class Citation:
             self.tags = [tag]
         else:
             self.tags.append(tag)
-            
-    def get_citations_by_tag(self, tag: str):
-        """ Get all citations that contain the given tag """
-        return [citation for citation in self.citations if tag in citation.tags]
+
+
 
     def generate_cite_key(self):
         """Generates a citation key for the article."""
