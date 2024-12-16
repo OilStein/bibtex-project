@@ -8,6 +8,7 @@ Functions:
     get_article_info(): Prompts the user for article details and returns an Article object.
 """
 import article
+import citation
 
 # pylint: disable=too-many-branches
 # pylint: disable=too-many-statements
@@ -21,6 +22,8 @@ def start(db):
 
         if command == "new":
             add_citation(db)
+        elif command == "from doi":
+            add_citation_doi(db)
         elif command == "list":
             list_citations(db)
         elif command == "edit":
@@ -45,6 +48,15 @@ def add_citation(db):
     Asks the user for article information and adds it to the database.
     """
     article_obj = get_article_info()
+    db.add_citation(article_obj)
+
+def add_citation_doi(db):
+    """
+    Asks the user for article doi and adds it to the database.
+    """
+    doi = input("Give doi: ")
+    article_obj = citation.Citation.from_doi(doi)
+    print(f"Added article \"{article_obj.title}\"")
     db.add_citation(article_obj)
 
 def edit_citation(db):
