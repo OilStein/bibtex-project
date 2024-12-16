@@ -28,7 +28,7 @@ def start(db):
             list_citations(db)
         elif command == "edit":
             edit_citation(db)
-        elif command == "tag": # Tägätään jokin viite.
+        elif command == "tag":
             add_tag(db)
         elif command == "save":
             save_to_file(db, "citations")
