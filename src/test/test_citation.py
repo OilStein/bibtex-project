@@ -88,6 +88,22 @@ class TestCitation(TestCase):
 
         self.assertEqual("Spanner: Google's globally-distributed database", citation_obj.title)
 
+    @mock.patch("citation.print", create=True)
+    @mock.patch('requests.post', create=True)
+    def test_from_bad_doi(self, mocked_post, mocked_print):
+        """Test failing in creating a citation from doi"""
+        class MockResponse(): # pylint: disable=too-few-public-methods
+            """class for mocking a response"""
+            def json(self):
+                """method for mocking a response's json method"""
+                return {}
+
+        mocked_post.side_effect = [MockResponse()]
+
+        citation_obj = Citation.from_doi("10.5555/2387880.2387905")
+
+        self.assertIn(mock.call("Received bad data"), mocked_print.mock_calls)
+
     def test_str(self):
         """Test for testing __str__ method"""
         citation_obj = Citation("Another Test", "Mikko", 2023)

@@ -16,23 +16,33 @@ class Citation:
     def from_bib(cls, bibtex):
         """Class method for creating citations from bibtex"""
         data = Citation.parse_bibtex_entry(bibtex)
+        if not data:
+            print("Bad bibtex")
+            return None
         return cls(**data)
 
     @classmethod
     def from_doi(cls, doi):
         """Class method for creating citations from bibtex"""
-        data = requests.post('https://dl.acm.org/action/exportCiteProcCitation', timeout=5.0, data={
-        'dois': doi,
-        'targetFile': 'custom-bibtex',
-        'format': 'bibTex'
-        }).json()["items"][0][doi]
+        try:
+            data = requests.post('https://dl.acm.org/action/exportCiteProcCitation', timeout=5.0, data={
+            'dois': doi,
+            'targetFile': 'custom-bibtex',
+            'format': 'bibTex'
+            }).json()["items"][0][doi]
 
-        author = " and ".join([
-            f"{person['family']}, {person['given']}" 
-            for person in data["author"]
-            ])
+            author = " and ".join([
+                f"{person['family']}, {person['given']}" 
+                for person in data["author"]
+                ])
 
-        return cls(data["title"], author, data["original-date"]["date-parts"][0][0])
+            return cls(data["title"], author, data["original-date"]["date-parts"][0][0])
+
+        except ConnectionError:
+            print("Failed to connect")
+
+        except KeyError:
+            print("Received bad data")
 
     def add_tag(self, tag):
         """Add a tag to the citation"""
@@ -85,7 +95,7 @@ class Citation:
                     fields[key] = value
 
             return {'identifier': identifier, **fields}
-        return {}
+        return None
 
     def to_dict(self):
         """Convert to a dictionary"""
