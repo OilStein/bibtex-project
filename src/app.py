@@ -3,9 +3,13 @@ import json
 
 # pylint: disable=import-error
 from flask import Flask, request
+from flask_cors import CORS
+
 from database import Citations
 
+
 app = Flask(__name__)
+CORS(app)
 db = Citations()
 
 
@@ -14,7 +18,7 @@ def hello():
     """Return a friendly HTTP greeting."""
     return 'Hello, World!'
 
-@app.route('/')
+@app.route('/citations')
 def get_all_citations():
     """Return JSON of citations."""
     response = app.response_class(
@@ -25,7 +29,7 @@ def get_all_citations():
     response.headers['Content-Type'] = 'application/json; charset=utf-8'
     return response
 
-@app.post('/citation')
+@app.post('/citations')
 def post_citation():
     """Add a new citation."""
     data = request.get_json()
