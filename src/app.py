@@ -16,7 +16,7 @@ register_routes(app, db)
 
 def init_app():
     """Initialize the app."""
-    db.load_from_file('data/dd.txt')
+    db.load_from_file('data/citations.txt')
 
 
 def main():

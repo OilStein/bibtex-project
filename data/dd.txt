@@ -1,14 +1,14 @@
-@article{Jaakko2024,
+@misc{Jaakko2024,
 	author = "Jaakko",
 	title = "TestiEdit",
-	journal = "Testaus",
-	year = "2024"
+	year = "2024",
+	tags = "['test', 'lisays']"
 }
 
-@article{Mikko2023,
+@misc{Mikko2023,
 	author = "Mikko",
 	title = "Another Test",
-	journal = "Testing Journal",
-	year = "2023"
+	year = "2023",
+	tags = "['example', 'dummy']"
 }
 
