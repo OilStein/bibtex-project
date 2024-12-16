@@ -21,13 +21,16 @@ class Citation:
     @classmethod
     def from_doi(cls, doi):
         """Class method for creating citations from bibtex"""
-        data = requests.post('https://dl.acm.org/action/exportCiteProcCitation', data={
+        data = requests.post('https://dl.acm.org/action/exportCiteProcCitation', timeout=5.0, data={
         'dois': doi,
         'targetFile': 'custom-bibtex',
         'format': 'bibTex'
         }).json()["items"][0][doi]
 
-        author = " and ".join([f"{person['family']}, {person['given']}" for person in data["author"]])
+        author = " and ".join([
+            f"{person['family']}, {person['given']}" 
+            for person in data["author"]
+            ])
 
         return cls(data["title"], author, data["original-date"]["date-parts"][0][0])
 

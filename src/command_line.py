@@ -16,7 +16,7 @@ def start(db):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
-    print("Commands: new, list, tag, save, load, quit, edit, load bibtex, save bibtex")
+    print("Commands: new, from doi, list, tag, save, load, quit, edit, load bibtex, save bibtex")
     while True:
         command = input("Enter a command: ")
 
@@ -64,18 +64,18 @@ def edit_citation(db):
     Asks for a citation and edits its details
     """
     cite_key = input("Enter the citation key of the citation to edit: ")
-    citation = db.get_one_citation(cite_key)
-    if citation is None:
+    citation_obj = db.get_one_citation(cite_key)
+    if citation_obj is None:
         print("Citation not found.")
         return
     print("Leave the field blank to keep the current value.")
-    new_title = input(f"Enter new title (current: {citation.title}): ") or citation.title
+    new_title = input(f"Enter new title (current: {citation_obj.title}): ") or citation_obj.title
     new_author = input(
-        f"Enter new author(s) (current: {citation.author}): ") or citation.author
-    new_year = input(f"Enter new year (current: {citation.year}): ") or citation.year
-    citation.title = new_title
-    citation.author = new_author
-    citation.year = new_year
+        f"Enter new author(s) (current: {citation_obj.author}): ") or citation_obj.author
+    new_year = input(f"Enter new year (current: {citation_obj.year}): ") or citation_obj.year
+    citation_obj.title = new_title
+    citation_obj.author = new_author
+    citation_obj.year = new_year
     print("Citation updated successfully.")
 
 def add_tag(db):
@@ -83,13 +83,13 @@ def add_tag(db):
     Asks the user for a citation and the tags to add to it.
     """
     cite_key = input("Enter the citation key: ")
-    citation = db.get_one_citation(cite_key)
-    if citation is None:
+    citation_obj = db.get_one_citation(cite_key)
+    if citation_obj is None:
         print("Citation not found.")
         return
     tags = input("Enter the tags: ").split(",")
     for tag in tags:
-        citation.add_tag(tag.strip())
+        citation_obj.add_tag(tag.strip())
 
 def list_citations(db):
     """Prints the list of citations in the database."""
@@ -155,6 +155,6 @@ def get_article_info():
 
 def print_citation_list(db):
     """Prints the list of citations in the database."""
-    for citation in db.get_citations():
+    for citation_obj in db.get_citations():
         # Needs to be in this format for the tests to work. Otherwise comparing object to string.
-        print(str(citation))
+        print(str(citation_obj))
