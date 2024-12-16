@@ -11,6 +11,7 @@ COMMANDS = [
         'from doi',
         'list',
         'tag',
+        'list by tag',
         'save',
         'load',
         'quit',
