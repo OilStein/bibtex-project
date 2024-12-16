@@ -57,7 +57,7 @@ class Citations:
         """Load citations from a BibTeX file"""
         try:
             with open(filename, 'r', encoding='utf-8') as file:
-                entries = re.findall(r'@article\{[^}]*\}', file.read(), re.DOTALL)
+                entries = re.findall(r'@misc\{[^}]*\}', file.read(), re.DOTALL)
                 self.citations = []
                 for entry in entries:
                     obj = Citation.from_bib(entry)
@@ -74,7 +74,7 @@ class Citations:
         try:
             with open(filename, 'w', encoding='utf-8') as file:
                 for citation in self.citations:
-                    file.write(citation.to_bibtex())
+                    file.write(citation.print_as_bibtex())
                     file.write("\n\n")
             print(f"Citations saved to {filename}")
         except IOError as e:
