@@ -87,3 +87,7 @@ class Citations:
             print(f"Citations saved to {filename}")
         except IOError as e:
             print(f"Error saving to file: {e}")
+
+    def get_citations_by_tag(self, tag: str):
+        """ Get all citations that contain the given tag """
+        return [citation for citation in self.citations if tag in citation.tags]
