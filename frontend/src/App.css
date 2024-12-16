@@ -35,3 +35,27 @@
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+.add-entry-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.doi-input {
+  flex: 1;
+}
+
+.doi-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.doi-button:hover {
+  background-color: #0056b3;
+}

@@ -40,9 +40,9 @@ const CitationDialog = ({ isOpen, onClose, onSave, entry, onChange, currentRow }
           margin="normal"
         />
         <TextField
-          label="Tags"
+          label="Tags (comma separated)"
           name="tags"
-          value={entry.tags}
+          value={entry.tags.join(', ')}
           onChange={onChange}
           fullWidth
           margin="normal"

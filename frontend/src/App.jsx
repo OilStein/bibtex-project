@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import { TableContainer, Paper, Button, TextField } from '@mui/material';
+import { TableContainer, Paper, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import CitationsTable from './CitationsTable';
 import CitationDialog from './CitationDialog';
 
@@ -9,9 +9,11 @@ const App = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isDoiDialogOpen, setDoiDialogOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
   const [newEntry, setNewEntry] = useState({ author: '', title: '', journal: '', year: '', tags: [], cite_key: '' });
   const [selectedCitations, setSelectedCitations] = useState([]);
+  const [doi, setDoi] = useState('');
 
   useEffect(() => {
     fetch(proxy + 'citations')
@@ -31,6 +33,15 @@ const App = () => {
     setNewEntry({ author: '', title: '', journal: '', year: '', tags: [], cite_key: '' });
   };
 
+  const handleOpenDoiDialog = () => {
+    setDoiDialogOpen(true);
+  };
+
+  const handleCloseDoiDialog = () => {
+    setDoiDialogOpen(false);
+    setDoi('');
+  };
+
   const handleSave = () => {
     if (currentRow) {
       setData((prev) => prev.map((row) => (row === currentRow ? newEntry : row)));
@@ -40,17 +51,42 @@ const App = () => {
     handleCloseDialog();
   };
 
+  const handleSaveDoi = () => {
+    fetch(proxy + 'doi', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ doi }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setData((prev) => [...prev, data]);
+        setDoi('');
+        handleCloseDoiDialog();
+      })
+      .catch((err) => console.log(err));
+  };
+
   const handleDelete = (row) => {
     setData((prev) => prev.filter((item) => item !== row));
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewEntry((prev) => ({ ...prev, [name]: value }));
+    if (name === 'tags') {
+      setNewEntry((prev) => ({ ...prev, tags: value.split(',').map(tag => tag.trim()) }));
+    } else {
+      setNewEntry((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleDoiChange = (e) => {
+    setDoi(e.target.value);
   };
 
   const handleSelectCitation = (cite_key) => {
@@ -81,9 +117,14 @@ const App = () => {
         margin="normal"
         className="search-bar"
       />
-      <Button variant="contained" color="primary" onClick={() => handleOpenDialog()}>
-        Add New Entry
-      </Button>
+      <div className="add-entry-container">
+        <Button variant="contained" color="primary" onClick={() => handleOpenDialog()}>
+          Add New Entry
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleOpenDoiDialog}>
+          Add via DOI
+        </Button>
+      </div>
       <TableContainer component={Paper} className="table-container">
         <CitationsTable
           data={filteredData}
@@ -101,6 +142,26 @@ const App = () => {
         onChange={handleInputChange}
         currentRow={currentRow}
       />
+      <Dialog open={isDoiDialogOpen} onClose={handleCloseDoiDialog}>
+        <DialogTitle>Add Entry via DOI</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="DOI"
+            value={doi}
+            onChange={handleDoiChange}
+            fullWidth
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDoiDialog} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSaveDoi} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
