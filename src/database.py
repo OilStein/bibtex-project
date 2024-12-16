@@ -66,7 +66,11 @@ class Citations:
         try:
             with open(filename, 'r', encoding='utf-8') as file:
                 entries = re.findall(r'@article\{[^}]*\}', file.read(), re.DOTALL)
-                self.citations = [Citation.from_bib(entry) for entry in entries]
+                self.citations = []
+                for entry in entries:
+                    obj = Citation.from_bib(entry)
+                    if obj:
+                        self.citations.append(obj)
         except FileNotFoundError:
             print("File not found")
         except IOError as e:

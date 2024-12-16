@@ -43,7 +43,7 @@ class TestCommandLine(TestCase):
             mock.call('Commands: ' + ', '.join(commands))
             ])
         # Check that we print correctly
-        self.assertEqual(mocked_input.mock_calls, [mock.call("Enter a command: ")])
+        self.assertListEqual(mocked_input.mock_calls, [mock.call("Enter a command: ")])
 
     @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
@@ -62,9 +62,9 @@ class TestCommandLine(TestCase):
 
             # Check that the save_to_file method was called
             db.save_to_file.assert_called_once_with("data/testi.txt")
-            self.assertEqual(mocked_print.mock_calls, [])
+            self.assertListEqual(mocked_print.mock_calls, [])
             # Only asks for file
-            self.assertEqual(mocked_input.mock_calls, [mock.call("Enter the filename: ")])
+            self.assertListEqual(mocked_input.mock_calls, [mock.call("Enter the filename: ")])
 
     @mock.patch('command_line.input', create=True)
     def test_start_load(self, mocked_input):
@@ -73,7 +73,7 @@ class TestCommandLine(TestCase):
         db = Citations()
         command_line.start(db)
 
-        self.assertTrue(mock.call('Enter the filename: ') in mocked_input.mock_calls)
+        self.assertIn(mock.call('Enter the filename: '), mocked_input.mock_calls)
 
 
 
@@ -87,10 +87,10 @@ class TestCommandLine(TestCase):
         art.add_tag("Java")
         db.add_citation(art)
         command_line.start(db)
-        self.assertTrue(mock.call('Citation not found.') in mocked_print.mock_calls)
+        self.assertIn(mock.call('Citation not found.'), mocked_print.mock_calls)
 
-        self.assertTrue(mock.call('Enter the citation key: ') in mocked_input.mock_calls)
-        self.assertTrue(mock.call('Enter the tags: ') in mocked_input.mock_calls)
+        self.assertIn(mock.call('Enter the citation key: '), mocked_input.mock_calls)
+        self.assertIn(mock.call('Enter the tags: '), mocked_input.mock_calls)
 
     @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
@@ -122,25 +122,25 @@ class TestCommandLine(TestCase):
             db.add_citation(article)
         command_line.start(db)
 
-        self.assertTrue(
-            mock.call('Leave the field blank to keep the current value.')
-            in mocked_print.mock_calls)
+        self.assertIn(
+            mock.call('Leave the field blank to keep the current value.'),
+            mocked_print.mock_calls)
 
-        self.assertTrue(mock.call('Citation updated successfully.') in mocked_print.mock_calls)
+        self.assertIn(mock.call('Citation updated successfully.'), mocked_print.mock_calls)
 
-        self.assertTrue(
-            mock.call('Enter the citation key of the citation to edit: ')
-            in mocked_input.mock_calls)
+        self.assertIn(
+            mock.call('Enter the citation key of the citation to edit: '),
+            mocked_input.mock_calls)
 
-        self.assertTrue(
-            mock.call('Enter new title (current: Dynamic huffman coding): ')
-            in mocked_input.mock_calls)
+        self.assertIn(
+            mock.call('Enter new title (current: Dynamic huffman coding): '),
+            mocked_input.mock_calls)
 
-        self.assertTrue(
-            mock.call('Enter new author(s) (current: Thomas Ridgewell and Elliot Caldwell): ')
-            in mocked_input.mock_calls)
+        self.assertIn(
+            mock.call('Enter new author(s) (current: Thomas Ridgewell and Elliot Caldwell): '),
+            mocked_input.mock_calls)
 
-        self.assertTrue(mock.call('Enter new year (current: 2013): ') in mocked_input.mock_calls)
+        self.assertIn(mock.call('Enter new year (current: 2013): '), mocked_input.mock_calls)
 
 
         changed_article = db.get_one_citation("RidgewellCaldwell2013")
@@ -173,7 +173,7 @@ class TestCommandLine(TestCase):
             db.add_citation(article)
         command_line.start(db)
 
-        self.assertTrue(mock.call('Citation not found.') in mocked_print.mock_calls)
+        self.assertIn(mock.call('Citation not found.'), mocked_print.mock_calls)
 
 
     @mock.patch('command_line.input', create=True)
