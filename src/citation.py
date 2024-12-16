@@ -59,7 +59,7 @@ class Citation:
             f'@misc{{{self.cite_key},\n'
             f'\tauthor = "{self.author}",\n'
             f'\ttitle = "{self.title}",\n'
-            f'\tyear = "{self.year}"\n'
+            f'\tyear = "{self.year}",\n'
             f'\ttags = "{self.tags}"\n'
             f'}}'
         )
@@ -68,7 +68,7 @@ class Citation:
     def parse_bibtex_entry(cls, bibtex_str):
         """Class method for parsing bibtex into a dict"""
         # Define a regex pattern to match the BibTeX fields
-        pattern = r'(?P<key>@article\{(?P<identifier>[^,]+),\s*(?P<fields>.+?)\s*\})'
+        pattern = r'(?P<key>@misc\{(?P<identifier>[^,]+),\s*(?P<fields>.+?)\s*\})'
         match = re.search(pattern, bibtex_str, re.DOTALL)
 
         if match:
@@ -99,14 +99,3 @@ class Citation:
 
     def __str__(self):
         return f"{self.cite_key}, {self.title}, {self.author}, {self.year}, {self.tags}"
-
-
-if __name__ == "__main__":
-    BIB_STR = """@article{Doe2023,
-        author = "John Doe",
-        title = "Sample Article",
-        journal = "Journal of Testing",
-        year = "2023"
-}"""
-    obj = Citation.from_bib(BIB_STR)
-    print(str(obj))

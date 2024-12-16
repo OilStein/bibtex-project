@@ -57,16 +57,16 @@ class TestCitations(unittest.TestCase):
         with patch("builtins.open", mock_open(read_data=mock_data)):
             db.load_from_file("test.json")
 
-        assert len(db.get_citations()) == 1
+        self.assertTrue(len(db.get_citations()) == 1)
 
         loaded_article = db.get_citations()[0]
 
-        assert isinstance(loaded_article, Article)
+        self.assertTrue(isinstance(loaded_article, Article))
 
-        assert loaded_article.title == "Testaus"
-        assert loaded_article.author == "Testaaja"
-        assert loaded_article.year == "2024"
-        assert loaded_article.tags == ["test"]
-        assert loaded_article.journal == "Testi lehti"
-        assert loaded_article.cite_key == "Testaaja2024"
-        assert loaded_article.doi is None
+        self.assertTrue(loaded_article.title == "Testaus")
+        self.assertTrue(loaded_article.author == "Testaaja")
+        self.assertTrue(loaded_article.year == "2024")
+        self.assertTrue(loaded_article.tags == ["test"])
+        self.assertTrue(loaded_article.journal == "Testi lehti")
+        self.assertTrue(loaded_article.cite_key == "Testaaja2024")
+        self.assertTrue(loaded_article.doi is None)
