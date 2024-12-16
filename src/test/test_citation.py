@@ -100,7 +100,7 @@ class TestCitation(TestCase):
 
         mocked_post.side_effect = [MockResponse()]
 
-        citation_obj = Citation.from_doi("10.5555/2387880.2387905")
+        Citation.from_doi("10.5555/2387880.2387905")
 
         self.assertIn(mock.call("Received bad data"), mocked_print.mock_calls)
 
