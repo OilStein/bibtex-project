@@ -12,20 +12,26 @@ const App = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isDoiDialogOpen, setDoiDialogOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
-  const [newEntry, setNewEntry] = useState({ author: '', title: '', journal: '', year: '', tags: [], cite_key: '' });
+  const [newEntry, setNewEntry] = useState({ author: '', title: '', journal: '', year: 0, tags: [], cite_key: '' });
   const [selectedCitations, setSelectedCitations] = useState([]);
   const [doi, setDoi] = useState('');
 
   useEffect(() => {
     fetch(proxy + 'citations')
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error('Failed to fetch citations');
+        }
+      })
       .then((data) => setData(data))
       .catch((err) => console.log(err));
   }, []);
 
   const handleOpenDialog = (row = null) => {
     setCurrentRow(row);
-    setNewEntry(row || { author: '', title: '', journal: '', year: '', tags: [], cite_key: '' });
+    setNewEntry(row || { author: '', title: '', journal: '', year: 0, tags: [], cite_key: '' });
     setDialogOpen(true);
   };
 
@@ -44,14 +50,29 @@ const App = () => {
   };
 
   const handleSave = () => {
-    fetch(proxy + 'citation', {
+    let endpoint = currentRow ? proxy + 'citations/' + currentRow.cite_key : proxy + 'citations';
+    fetch(endpoint, {
       method: currentRow ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newEntry),
     })
-    handleCloseDialog();
+      .then((res) => {
+        if (res.status === 201 || res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error('Failed to save citation');
+        }
+      })
+      .then((data) => {
+        if (currentRow) {
+          setData((prev) => prev.map((item) => (item.cite_key === data.cite_key ? data : item)));
+        } else {
+          setData((prev) => [...prev, data]);
+        }
+        handleCloseDialog();
+      })
   };
 
   const handleSaveDoi = () => {
@@ -62,7 +83,13 @@ const App = () => {
       },
       body: JSON.stringify({ doi }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 201 || res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error('Failed to save DOI');
+        }
+      })
       .then((data) => {
         setData((prev) => [...prev, data]);
         setDoi('');
@@ -79,6 +106,8 @@ const App = () => {
     const { name, value } = e.target;
     if (name === 'tags') {
       setNewEntry((prev) => ({ ...prev, tags: value.split(',').map(tag => tag.trim()) }));
+    } else if (name === 'year') {
+      setNewEntry((prev) => ({ ...prev, [name]: Number(value) }));
     } else {
       setNewEntry((prev) => ({ ...prev, [name]: value }));
     }
@@ -106,7 +135,13 @@ const App = () => {
       },
       body: JSON.stringify({ keys: selectedCitations }),
     })
-      .then((res) => res.blob())
+      .then((res) => {
+        if (res.status === 200) {
+          return res.blob();
+        } else {
+          throw new Error('Failed to download Bibtex');
+        }
+      })
       .then((blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');

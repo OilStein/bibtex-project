@@ -9,6 +9,14 @@ class Citations:
     def __init__(self):
         self.citations = []
 
+    def update_citation(self, cite_key: str, citation: Citation):
+        """ Update citation in database """
+        for i, cit in enumerate(self.citations):
+            if cit.cite_key == cite_key:
+                self.citations[i] = citation
+                return
+        raise KeyError(f"Citation {cite_key} not found")
+
     def add_citation(self, citation: str):
         """ Add citation to database """
         self.citations.append(citation)

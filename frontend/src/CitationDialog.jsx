@@ -34,6 +34,7 @@ const CitationDialog = ({ isOpen, onClose, onSave, entry, onChange, currentRow }
         <TextField
           label="Year"
           name="year"
+          type="number"
           value={entry.year}
           onChange={onChange}
           fullWidth
