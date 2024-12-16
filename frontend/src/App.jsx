@@ -44,11 +44,13 @@ const App = () => {
   };
 
   const handleSave = () => {
-    if (currentRow) {
-      setData((prev) => prev.map((row) => (row === currentRow ? newEntry : row)));
-    } else {
-      setData((prev) => [...prev, newEntry]);
-    }
+    fetch(proxy + 'citation', {
+      method: currentRow ? 'PUT' : 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newEntry),
+    })
     handleCloseDialog();
   };
 
