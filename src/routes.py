@@ -1,6 +1,6 @@
 """Routes for the Flask app."""
 import json
-from flask import request
+from flask import request, send_file
 
 from database import Citations
 from article import Article
@@ -34,7 +34,7 @@ def register_routes(app, db):
             tmp_citation.tags = data.get('tags', [])
             tmp_citation.cite_key =tmp_citation.generate_cite_key()
 
-            print(str(tmp_citation))
+            # print(str(tmp_citation))
             db.add_citation(tmp_citation)
             return tmp_citation.to_dict(), 201
 
@@ -61,34 +61,29 @@ def register_routes(app, db):
         except KeyError as e:
             return {"error": str(e)}, 404
 
-    @app.get('/citations/<cite_keys>')
-    def download_bibtex():
-        """ Takes list of cite_keys and returns a bibtex file."""
-        try:
-            cite_keys = request.args.get('cite_keys').split(',')
-            cite_keys = [key.strip() for key in cite_keys]
-            tmp_database = Citations()
-            for key in cite_keys:
-                tmp_database.add_citation(db.get_one_citation(key).to_dict())
-            bibtex = ""
-            for citation in tmp_database.get_citations():
-                bibtex += citation.print_as_bibtex() + "\n\n"
-
-            response = app.response_class(
-                response=bibtex,
-                status=200,
-                mimetype='text/plain'
-            )
-            response.headers['Content-Type'] = 'text/plain; charset=utf-8'
-        except KeyError as e:
-            response = {"error": str(e)}, 404
-        return response
-
     @app.delete('/citations/<cite_key>')
     def delete_citation(cite_key):
         """Delete a citation."""
         try:
+            print(cite_key)
+            tmp = db.get_one_citation(cite_key)
             db.delete_citation(cite_key)
-            return {"success": "Citation deleted"}, 200
+            return tmp.to_dict(), 200
         except KeyError as e:
+            return {"error": str(e)}, 404
+
+    @app.post('/bibtex')
+    def download_bibtex():
+        """Takes list of cite_keys from JSON and returns a BibTeX file."""
+        data = request.get_json()
+        if not data or 'keys' not in data:
+            return {"error": "Invalid input"}, 400
+        try:
+            cite_keys = data['keys']
+            tmp_citations = Citations()
+            for key in cite_keys:
+                tmp_citations.add_citation(db.get_one_citation(key))
+            tmp_citations.save_as_bibtex("data/dd.txt")
+            return send_file("data/dd.txt", as_attachment=True, download_name="dd.txt"), 200
+        except FileNotFoundError as e:
             return {"error": str(e)}, 404

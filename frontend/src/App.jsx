@@ -98,8 +98,19 @@ const App = () => {
       .catch((err) => console.log(err));
   };
 
+
   const handleDelete = (row) => {
-    setData((prev) => prev.filter((item) => item !== row));
+    fetch(proxy + 'citations' + row.cite_key, {
+      method: 'DELETE',
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          setData((prev) => prev.filter((item) => item.cite_key !== row.cite_key));
+        } else {
+          throw new Error('Failed to delete citation');
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleInputChange = (e) => {
@@ -147,7 +158,7 @@ const App = () => {
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
-        a.download = 'citations.bib';
+        a.download = 'dd.txt';
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);

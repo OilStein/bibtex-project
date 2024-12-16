@@ -1,50 +1,14 @@
-[
-    {
-        "title": "TestiEdit",
-        "author": "Jaakko",
-        "year": "2024",
-        "tags": [
-            "test",
-            "lisays"
-        ],
-        "cite_key": "Jaakko2024",
-        "journal": "Testaus",
-        "doi": null
-    },
-    {
-        "title": "Another Test",
-        "author": "Mikko",
-        "year": "2023",
-        "tags": [
-            "example",
-            "dummy"
-        ],
-        "cite_key": "Mikko2023",
-        "journal": "Testing Journal",
-        "doi": "10.1000/testdoi"
-    },
-    {
-        "title": "Sample Data",
-        "author": "Anna",
-        "year": "2022",
-        "tags": [
-            "sample",
-            "data"
-        ],
-        "cite_key": "Anna2022",
-        "journal": "Sample Journal",
-        "doi": "10.1000/sampledoi"
-    },
-    {
-        "title": "New Entry",
-        "author": "John Doe",
-        "year": "2025",
-        "tags": [
-            "new",
-            "entry"
-        ],
-        "cite_key": "Doe2025",
-        "journal": "New Journal",
-        "doi": "10.1000/newdoi"
-    }
-]
+@article{Jaakko2024,
+	author = "Jaakko",
+	title = "TestiEdit",
+	journal = "Testaus",
+	year = "2024"
+}
+
+@article{Mikko2023,
+	author = "Mikko",
+	title = "Another Test",
+	journal = "Testing Journal",
+	year = "2023"
+}
+
