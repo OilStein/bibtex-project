@@ -25,10 +25,11 @@ class Citation:
     def from_doi(cls, doi):
         """Class method for creating citations from bibtex"""
         try:
-            data = requests.post('https://dl.acm.org/action/exportCiteProcCitation', timeout=5.0, data={
-            'dois': doi,
-            'targetFile': 'custom-bibtex',
-            'format': 'bibTex'
+            data = requests.post('https://dl.acm.org/action/exportCiteProcCitation', timeout=5.0,
+            data={
+                'dois': doi,
+                'targetFile': 'custom-bibtex',
+                'format': 'bibTex'
             }).json()["items"][0][doi]
 
             author = " and ".join([
@@ -43,6 +44,8 @@ class Citation:
 
         except KeyError:
             print("Received bad data")
+
+        return None
 
     def add_tag(self, tag):
         """Add a tag to the citation"""
