@@ -66,9 +66,8 @@ class TestCommandLine(TestCase):
             # Only asks for file
             self.assertEqual(mocked_input.mock_calls, [mock.call("Enter the filename: ")])
 
-    @mock.patch("command_line.print", create=True)
     @mock.patch('command_line.input', create=True)
-    def test_start_load(self, mocked_input, mocked_print):
+    def test_start_load(self, mocked_input):
         """ This method tests the start methods save of the command_line module. """
         mocked_input.side_effect = ["load","dummy_data", "quit"]
         db = Citations()
