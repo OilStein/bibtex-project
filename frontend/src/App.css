@@ -3,9 +3,35 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  min-width: 80%;
 }
-
 
 .card {
   padding: 2em;
+}
+
+.table-container {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.search-bar {
+  background-color: #f9f9f9;
+  padding: 0.5rem;
+  border-radius: 4px;
+  box-sizing: border-box;
 }

@@ -1,60 +1,40 @@
-import { useState, useEffect } from 'react'
-import './App.css'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@mui/material';
+import { useState, useEffect } from 'react';
+import './App.css';
+import { TableContainer, Paper, Button, TextField } from '@mui/material';
+import CitationsTable from './CitationsTable';
+import CitationDialog from './CitationDialog';
 
 const App = () => {
-
-  const proxy = 'http://127.0.0.1:5000/'
-
-
+  const proxy = 'http://127.0.0.1:5000/';
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
   const [newEntry, setNewEntry] = useState({ author: '', title: '', journal: '', year: '', tags: [], cite_key: '' });
+  const [selectedCitations, setSelectedCitations] = useState([]);
 
   useEffect(() => {
     fetch(proxy + 'citations')
       .then((res) => res.json())
       .then((data) => setData(data))
       .catch((err) => console.log(err));
-    console.log(data)
   }, []);
 
   const handleOpenDialog = (row = null) => {
     setCurrentRow(row);
-    setNewEntry(row || { author: '', title: '', journal: '', year: '' });
+    setNewEntry(row || { author: '', title: '', journal: '', year: '', tags: [], cite_key: '' });
     setDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
-    setNewEntry({ author: '', title: '', journal: '', year: '' });
+    setNewEntry({ author: '', title: '', journal: '', year: '', tags: [], cite_key: '' });
   };
 
   const handleSave = () => {
     if (currentRow) {
-      // Update existing entry
-      setData((prev) =>
-        prev.map((row) => (row === currentRow ? newEntry : row))
-      );
+      setData((prev) => prev.map((row) => (row === currentRow ? newEntry : row)));
     } else {
-      // Add new entry
       setData((prev) => [...prev, newEntry]);
     }
     handleCloseDialog();
@@ -73,6 +53,12 @@ const App = () => {
     setSearchQuery(e.target.value);
   };
 
+  const handleSelectCitation = (cite_key) => {
+    setSelectedCitations((prev) =>
+      prev.includes(cite_key) ? prev.filter((key) => key !== cite_key) : [...prev, cite_key]
+    );
+  };
+
   const filteredData = data.filter((row) => {
     return (
       row.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -84,12 +70,8 @@ const App = () => {
     );
   });
 
-  const formatTags = (tags) => {
-    return tags.join(', ');
-  }
-
   return (
-    <div style={{ padding: '20px' }}>
+    <div id="root">
       <h1>Interactive Table</h1>
       <TextField
         label="Search"
@@ -97,107 +79,30 @@ const App = () => {
         onChange={handleSearchChange}
         fullWidth
         margin="normal"
+        className="search-bar"
       />
       <Button variant="contained" color="primary" onClick={() => handleOpenDialog()}>
         Add New Entry
       </Button>
-      <TableContainer component={Paper} style={{ marginTop: '20px' }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Key</TableCell>
-              <TableCell>Author</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Journal</TableCell>
-              <TableCell>Year</TableCell>
-              <TableCell>Tags</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredData.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>{row.cite_key}</TableCell>
-                <TableCell>{row.author}</TableCell>
-                <TableCell>{row.title}</TableCell>
-                <TableCell>{row.journal}</TableCell>
-                <TableCell>{row.year}</TableCell>
-                <TableCell>{formatTags(row.tags)}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => handleOpenDialog(row)}
-                    style={{ marginRight: '10px' }}
-                  >
-                    Edit
-                  </Button>
-                  <Button variant="outlined" color="secondary" onClick={() => handleDelete(row)}>
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <TableContainer component={Paper} className="table-container">
+        <CitationsTable
+          data={filteredData}
+          onEdit={handleOpenDialog}
+          onDelete={handleDelete}
+          selectedCitations={selectedCitations}
+          onSelect={handleSelectCitation}
+        />
       </TableContainer>
-
-      {/* Dialog for Adding/Editing */}
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>{currentRow ? 'Edit Entry' : 'Add New Entry'}</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Author"
-            name="author"
-            value={newEntry.author}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Title"
-            name="title"
-            value={newEntry.title}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Journal"
-            name="journal"
-            value={newEntry.journal}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Year"
-            name="year"
-            value={newEntry.year}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Tags"
-            name="tags"
-            value={newEntry.tags}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSave} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <CitationDialog
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog}
+        onSave={handleSave}
+        entry={newEntry}
+        onChange={handleInputChange}
+        currentRow={currentRow}
+      />
     </div>
   );
 };
 
-export default App
+export default App;
