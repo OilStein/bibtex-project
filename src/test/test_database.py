@@ -1,9 +1,10 @@
 """ Test the database module """
 import unittest
 import json
-from unittest.mock import patch, mock_open
+from unittest.mock import patch, mock_open, call
 from database import Citations
 from article import Article
+from citation import Citation
 
 class TestCitations(unittest.TestCase):
     """ This class contains the tests for the Citations class. """
@@ -70,3 +71,36 @@ class TestCitations(unittest.TestCase):
         self.assertTrue(loaded_article.journal == "Testi lehti")
         self.assertTrue(loaded_article.cite_key == "Testaaja2024")
         self.assertTrue(loaded_article.doi is None)
+
+    def test_load_from_bibtex(self):
+        """Test loading from a .bib file"""
+        mock_data = """@misc{Mikko2023,
+	author = "Mikko",
+	title = "Another Test",
+	journal = "Testing Journal",
+	year = "2023"
+}"""
+
+        db = Citations()
+
+        with patch("builtins.open", mock_open(read_data=mock_data)):
+            db.load_from_bibtex("test.bib")
+
+        self.assertTrue(len(db.get_citations()) == 1)
+
+        loaded_article = db.get_citations()[0]
+
+        self.assertTrue(isinstance(loaded_article, Citation))
+
+
+    def test_save_as_bibtex(self):
+        """Test to save to a .bib file"""
+        citation_obj = Citation("Another Test", "Mikko", 2023)
+        self.db.add_citation(citation_obj)
+        with patch("builtins.open", mock_open()) as mocked_file:
+            self.db.save_as_bibtex(self.filename)
+            mocked_file.assert_called_with(self.filename, 'w', encoding= "utf-8")
+            self.assertIn(
+                call().write('@misc{Mikko2023,\n\tauthor = "Mikko",\n\ttitle = "Another Test",\n\tyear = "2023",\n\ttags = "[\'\']"\n}'), # pylint: disable=line-too-long
+                mocked_file.mock_calls)
+            self.assertIn(call().write('\n\n'), mocked_file.mock_calls)
