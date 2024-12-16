@@ -16,7 +16,8 @@ def start(db):
     """ Starts the command-line interface. """
 
     print("Welcome to the citation database!")
-    print("Commands: new, from doi, list, tag, list by tag, save, load, quit, edit, load bibtex, save bibtex")
+    print("Commands: new, from doi, list, tag, list by tag, save, load, quit, edit, "
+    "load bibtex, save bibtex")
     while True:
         command = input("Enter a command: ")
 
@@ -60,7 +61,7 @@ def add_citation_doi(db):
     article_obj = citation.Citation.from_doi(doi)
     print(f"Added article \"{article_obj.title}\"")
     db.add_citation(article_obj)
-    
+
 def list_citations_by_tag(db):
     """
     Lists all citations that have a given tag.
@@ -71,8 +72,8 @@ def list_citations_by_tag(db):
         print(f"No citations found with tag: {tag}")
     else:
         print(f"Citations with tag '{tag}':")
-        for citation in citations_with_tag:
-            print(str(citation))
+        for citation2 in citations_with_tag:
+            print(str(citation2))
 
 def edit_citation(db):
     """
