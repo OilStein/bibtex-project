@@ -44,7 +44,7 @@ class Citations:
                         citation = article.Article(data['author'], data['title'],
                                                    data['journal'], data['year'])
                     else:
-                        citation = citation.Citation(data['title'], data['author'], data['year'])
+                        citation = Citation(data['title'], data['author'], data['year'])
                     citation.tags = data.get('tags', [])
                     self.citations.append(citation)
             print("Citations loaded")
