@@ -21,6 +21,8 @@ GitHub actions: https://github.com/OilStein/bibtex-project/actions
 
 Repositorio: https://github.com/OilStein/bibtex-project
 
+Raportti: https://jyu-my.sharepoint.com/:w:/g/personal/vikstjav_jyu_fi/EUzlYP28bhtHuDKge7XmEL0BCFv1EPEAZmPkNK2e8b8toQ?rtime=MznR2mEg3Ug
+
 
 ### Käyttöohje
 - **1. Kloonaa github**
